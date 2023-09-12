@@ -1,7 +1,7 @@
-import { Anchor } from "@mantine/core";
-import ActionIcons from "../../components/ActionIcons";
-import StatusToggle from "../../components/StatusToggle";
-import TableImageView from "../../components/TableImageView";
+import { Anchor, Badge } from "@mantine/core";
+import ActionIcons from "../../../components/ActionIcons";
+import StatusToggle from "../../../components/StatusToggle";
+import TableImageView from "../../../components/TableImageView";
 import ViewService from "./ViewOrder";
 
 export const Columns = [
@@ -51,24 +51,19 @@ export const Columns = [
     selector: (row) => row.payment,
     sortable: true,
     // center: true,
-    width: "150px",
+    width: "120px",
     cell: (row) => (
       <Anchor color="primary.0">{row?.receipt || "Receipt"}</Anchor>
     ),
   },
   {
     name: "Status",
-    selector: (row) => row.blocked,
+    selector: (row) => row.paymentStatus,
     width: "150px",
     sortable: true,
     center: true,
     cell: (row) => (
-      <StatusToggle
-        status={row.delivered}
-        id={row._id}
-        type={"order"}
-        queryName="fetchServices"
-      />
+      <Badge variant="gradient">{row.paymentStatus ? "Paid" : "Pending"}</Badge>
     ),
   },
   {
@@ -82,7 +77,7 @@ export const Columns = [
         // del={true}
         // edit={true}
         viewData={<ViewService rowData={row} />}
-        type="Order"
+        type="Revenue"
       />
     ),
   },
@@ -90,6 +85,6 @@ export const Columns = [
 
 export const filterbyStatus = [
   { label: "All", value: null },
-  { label: "Delivered", value: true },
+  { label: "Paid", value: true },
   { label: "Pending", value: false },
 ];

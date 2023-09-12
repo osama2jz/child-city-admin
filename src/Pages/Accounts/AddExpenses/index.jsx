@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Container, Group } from "@mantine/core";
+import { Container, Group, SimpleGrid } from "@mantine/core";
 import { useMutation } from "react-query";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -13,8 +13,9 @@ import { UserContext } from "../../../contexts/UserContext";
 import DropZone from "../../../components/Dropzone";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
+import SelectMenu from "../../../components/SelectMenu";
 
-export const AddCategory = () => {
+const AddExpenses = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -22,19 +23,22 @@ export const AddCategory = () => {
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
-      title: "",
+      name: "",
       description: "",
-      coverImage: null,
+      type: "",
+      amount: "",
+      image: null,
     },
 
     validate: {
       title: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
-          : "Please enter category title",
+          : "Please enter expenses title",
+      amount: (value) =>
+        value?.length > 0 && amount > 0 ? null : "Please enter amount",
       description: (value) =>
-        value?.length > 0 ? null : "Please enter category description",
-      coverImage: (value) => (value ? null : "Please upload a cover Image"),
+        value?.length > 0 ? null : "Please enter expenses description",
     },
   });
 
@@ -82,17 +86,34 @@ export const AddCategory = () => {
   });
   return (
     <Container fluid>
-      <PageHeader label={state?.isUpdate ? "Edit Category" : "Add Category"} />
+      <PageHeader label={state?.isUpdate ? "Edit Expenses" : "Add Expenses"} />
       <form
         onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
       >
         <InputField
           label={"Title"}
-          placeholder={"Enter Category Title"}
+          placeholder={"Enter Title"}
           form={form}
           withAsterisk
-          validateName={"title"}
+          validateName={"name"}
         />
+        <SimpleGrid cols={2}>
+          <SelectMenu
+            data={["Marketing", "Stock", "Others"]}
+            label="Expense Type"
+            placeholder="Select Expense Type"
+            form={form}
+            validateName="type"
+          />
+          <InputField
+            label={"Amount"}
+            placeholder={"Enter Amount"}
+            form={form}
+            type="number"
+            withAsterisk
+            validateName={"amount"}
+          />
+        </SimpleGrid>
         <TextArea
           label={"Short Description"}
           placeholder={"Enter Short Description"}
@@ -106,17 +127,17 @@ export const AddCategory = () => {
             form={form}
             folderName={"service"}
             name={"coverImage"}
-            label="Cover Image"
+            label="Image"
           />
         </Group>
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}
             variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewCategory)}
+            onClick={() => navigate(routeNames.general.viewExpesnes)}
           />
           <Button
-            label={state?.isUpdate ? "Edit Category" : "Add Category"}
+            label={state?.isUpdate ? "Edit Expenses" : "Add Expenses"}
             type={"submit"}
             loading={handleAddService.isLoading}
           />
@@ -125,3 +146,4 @@ export const AddCategory = () => {
     </Container>
   );
 };
+export default AddExpenses;

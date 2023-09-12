@@ -1,4 +1,4 @@
-import { Container, Group, Loader } from "@mantine/core";
+import { Container, Group, Loader, SimpleGrid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
@@ -47,9 +47,7 @@ export const AboutUs = () => {
   });
 
   //Get Data
-  const { status } = useQuery(
-    "fetchAboutUs",
-    () => {
+  const { status } = useQuery("fetchAboutUs", () => {
     //   return axios.get(backendUrl + "/api/v1/aboutUs", {
     //     headers: {
     //       authorization: `Bearer ${user.token}`,
@@ -60,8 +58,7 @@ export const AboutUs = () => {
     //   onSuccess: (res) => {
     //     form.setValues(res.data.data[0]);
     //   },
-    }
-  );
+  });
 
   const handleSave = useMutation(
     (values) => {
@@ -96,76 +93,59 @@ export const AboutUs = () => {
         <Loader style={{ display: "flex", margin: "auto" }} />
       ) : (
         <form onSubmit={form.onSubmit((values) => handleSave.mutate(values))}>
-          <InputField
-            label={"Primary Email Address"}
-            placeholder={"Enter Email Address"}
-            form={form}
-            withAsterisk
-            validateName={"primaryEmail"}
-          />
-          <InputField
-            label={"Other Email Address"}
-            placeholder={"Enter Other Contact Number"}
-            form={form}
-            validateName={"otherEmails"}
-          />
-          <InputField
-            label={"Primary Contact Number"}
-            placeholder={"Enter Contact Number"}
-            form={form}
-            withAsterisk
-            validateName={"primaryContact"}
-          />
-          <InputField
-            label={"Other Contact Number"}
-            placeholder={"Enter Other Contact Number"}
-            form={form}
-            validateName={"otherContacts"}
-          />
-
-          <InputField
-            label={"LinkedIn Profile"}
-            placeholder={"Enter LinkedIn Profile Link"}
-            form={form}
-            validateName={"linkedIn"}
-          />
-          <InputField
-            label={"Instagram Profile"}
-            placeholder={"Enter Instagram Profile Link"}
-            form={form}
-            validateName={"instagram"}
-          />
-          <InputField
-            label={"Facebook Profile"}
-            placeholder={"Enter Facebook Profile Link"}
-            form={form}
-            validateName={"facebook"}
-          />
-          <InputField
-            label={"Whatsapp Number"}
-            placeholder={"Enter Whatsapp Number"}
-            form={form}
-            validateName={"whatsapp"}
-          />
-          <InputField
-            label={"Youtube Profile"}
-            placeholder={"Enter Youtube Profile Link"}
-            form={form}
-            validateName={"youtube"}
-          />
-          <InputField
-            label={"Primary Address"}
-            placeholder={"Enter Primary Address"}
-            form={form}
-            withAsterisk
-            validateName={"primaryAddress"}
-          />
-          <InputField
-            label={"Other Address"}
-            placeholder={"Enter Other Address"}
-            form={form}
-            validateName={"otherAddresses"}
-          />
+          <SimpleGrid cols={2}>
+            <InputField
+              label={"Primary Email Address"}
+              placeholder={"Enter Email Address"}
+              form={form}
+              withAsterisk
+              validateName={"primaryEmail"}
+            />
+            <InputField
+              label={"Other Email Address"}
+              placeholder={"Enter Other Contact Number"}
+              form={form}
+              validateName={"otherEmails"}
+            />
+            <InputField
+              label={"Primary Contact Number"}
+              placeholder={"Enter Contact Number"}
+              form={form}
+              withAsterisk
+              validateName={"primaryContact"}
+            />
+            <InputField
+              label={"Other Contact Number"}
+              placeholder={"Enter Other Contact Number"}
+              form={form}
+              validateName={"otherContacts"}
+            />
+            <InputField
+              label={"Instagram Profile"}
+              placeholder={"Enter Instagram Profile Link"}
+              form={form}
+              validateName={"instagram"}
+            />
+            <InputField
+              label={"Facebook Profile"}
+              placeholder={"Enter Facebook Profile Link"}
+              form={form}
+              validateName={"facebook"}
+            />
+            <InputField
+              label={"Youtube Profile"}
+              placeholder={"Enter Youtube Profile Link"}
+              form={form}
+              validateName={"youtube"}
+            />
+            <InputField
+              label={"Address"}
+              placeholder={"Enter Primary Address"}
+              form={form}
+              withAsterisk
+              validateName={"primaryAddress"}
+            />
+          </SimpleGrid>
 
           <Group position="right" mt={"md"}>
             <Button

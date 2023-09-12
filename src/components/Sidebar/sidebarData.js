@@ -3,7 +3,7 @@ import {
   BrandVite,
   Category2,
   Graph,
-  Settings
+  Settings,
 } from "tabler-icons-react";
 import { routeNames } from "../../Routes/routeNames";
 export const sidebarData = [
@@ -32,8 +32,9 @@ export const sidebarData = [
     label: "Accounts",
     icon: BrandVite,
     links: [
-      { label: "Expenses", link: routeNames.general.addProduct },
-      { label: "Revenue", link: routeNames.general.viewProducts },
+      { label: "Add Expenses", link: routeNames.general.addExpenses },
+      { label: "View Expenses", link: routeNames.general.viewExpesnes },
+      { label: "View Revenue", link: routeNames.general.revenue },
     ],
   },
   {

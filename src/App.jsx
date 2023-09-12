@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import GeneralLayout from "./Layout/GeneralLayout";
 import { AboutUs } from "./Pages/AboutUs";
@@ -9,8 +9,11 @@ import { routeNames } from "./Routes/routeNames";
 import { AddCategory } from "./Pages/Categories/AddCategory";
 import ViewCategories from "./Pages/Categories/ViewCategories";
 import { AddProduct } from "./Pages/Products/AddProduct";
-import Orders from "./Pages/Orders"
+import Orders from "./Pages/Orders";
 import ViewProducts from "./Pages/Products/ViewProducts";
+import ViewRevenue from "./Pages/Accounts/Revnue";
+import AddExpenses from "./Pages/Accounts/AddExpenses";
+import ViewExpenses from "./Pages/Accounts/ViewExpenses";
 
 function App() {
   return (
@@ -33,7 +36,14 @@ function App() {
         />
         <Route path={routeNames.general.orders} element={<Orders />} />
         <Route path={routeNames.general.settings} element={<Settings />} />
+        <Route path={routeNames.general.revenue} element={<ViewRevenue />} />
         <Route path={routeNames.general.aboutUs} element={<AboutUs />} />
+        <Route path={routeNames.general.viewExpesnes} element={<ViewExpenses />} />
+        <Route
+          path={routeNames.general.addExpenses}
+          element={<AddExpenses />}
+        />
+        <Route path="*" element={<Navigate to={"/"} />} />
       </Route>
     </Routes>
   );

@@ -26,23 +26,15 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
   //to edit
   const handleEdit = () => {
     switch (type) {
-      case "service":
-        navigate(routeNames.general.addService, {
+      case "Category":
+        navigate(routeNames.general.addCategory, {
           state: {
             isUpdate: true,
             data: rowData,
           },
         });
         break;
-      case "project":
-        navigate(routeNames.general.addProject, {
-          state: {
-            isUpdate: true,
-            data: rowData,
-          },
-        });
-        break;
-      case "product":
+      case "Product":
         navigate(routeNames.general.addProduct, {
           state: {
             isUpdate: true,
@@ -50,32 +42,8 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
           },
         });
         break;
-      case "jobs":
-        navigate(routeNames.general.addJob, {
-          state: {
-            isUpdate: true,
-            data: rowData,
-          },
-        });
-        break;
-      case "teamMember":
-        navigate(routeNames.general.addTeam, {
-          state: {
-            isUpdate: true,
-            data: rowData,
-          },
-        });
-        break;
-      case "blog":
-        navigate(routeNames.general.addBlog, {
-          state: {
-            isUpdate: true,
-            data: rowData,
-          },
-        });
-        break;
-      case "testimonial":
-        navigate(routeNames.general.addTestimonial, {
+      case "Expenses":
+        navigate(routeNames.general.addExpenses, {
           state: {
             isUpdate: true,
             data: rowData,
@@ -112,7 +80,8 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
         else if (type === "teamMember")
           queryClient.invalidateQueries("fetchTeamMembers");
         else if (type === "blog") queryClient.invalidateQueries("fetchBlogs");
-        else if(type === "testimonial") queryClient.invalidateQueries("fetchTestimonials")
+        else if (type === "testimonial")
+          queryClient.invalidateQueries("fetchTestimonials");
       },
       onError: (res) => {
         showNotification({

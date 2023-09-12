@@ -26,7 +26,7 @@ export const AddProduct = () => {
     initialValues: {
       title: "",
       category: "",
-      session: "",
+      season: "",
       colors: "",
       sizes: "",
       price: "",
@@ -40,7 +40,7 @@ export const AddProduct = () => {
       title: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
-          : "Please enter service title between 2 to 30 characters",
+          : "Please enter product title",
       category: (value) =>
         value?.length > 0 ? null : "Please select product category",
       price: (value) =>
@@ -51,7 +51,7 @@ export const AddProduct = () => {
           : "Please select product quantity",
       sku: (value) => (value?.length > 0 ? null : "Please select product sku"),
       description: (value) =>
-        value?.length > 0 ? null : "Please enter Product description",
+        value?.length > 0 ? null : "Please enter product description",
       images: (value) =>
         value.length > 0 ? null : "Please upload product image",
     },
@@ -128,10 +128,10 @@ export const AddProduct = () => {
           <Grid.Col sm={6}>
             <SelectMenu
               data={["Winters Collections", "Summers Collection"]}
-              label="Select Session"
-              placeholder="Select Session"
+              label="Select Season"
+              placeholder="Select Season"
               form={form}
-              validateName="session"
+              validateName="season"
             />
           </Grid.Col>
           <Grid.Col sm={6}>

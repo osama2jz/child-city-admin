@@ -18,36 +18,44 @@ const ViewOrders = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([
+    {
+      serialNo: 1,
+      name: "Some Person",
+      productName: "Denim Jeans",
+      amount: "500",
+      quantity: "2",
+      payment: 3500,
+      address:'f-10 markaz, Islambad, Pakistan',
+      delivered: false,
+    },
+  ]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery(
-    "fetchServices",
-    () => {
-      return axios.get(backendUrl + "/api/v1/service", {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      });
-    },
-    {
-      onSuccess: (res) => {
-        const data = res.data.data;
-        data.map((item) => {
-          item.serialNo = data.indexOf(item) + 1;
-        });
-        setTableData(data);
-      },
-    }
-  );
+  const { status } = useQuery("fetchServices", () => {
+    //   return axios.get(backendUrl + "/api/v1/service", {
+    //     headers: {
+    //       authorization: `Bearer ${user.token}`,
+    //     },
+    //   });
+    // },
+    // {
+    //   onSuccess: (res) => {
+    //     const data = res.data.data;
+    //     data.map((item) => {
+    //       item.serialNo = data.indexOf(item) + 1;
+    //     });
+    //     setTableData(data);
+    //   },
+  });
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
-      return item?.title?.toLowerCase().includes(search.toLowerCase());
+      return item?.name?.toLowerCase().includes(search.toLowerCase());
     else
       return (
-        item?.title?.toLowerCase().includes(search.toLowerCase()) &&
-        item?.blocked === blockedFilter
+        item?.name?.toLowerCase().includes(search.toLowerCase()) &&
+        item?.delivered === blockedFilter
       );
   });
   const handleClearFilters = () => {
@@ -85,7 +93,7 @@ const ViewOrders = () => {
         </Grid>
         <DataGrid
           columns={Columns}
-          data={[{}]}
+          data={filteredItems}
           // progressPending={status === "loading"}
           type="service"
         />

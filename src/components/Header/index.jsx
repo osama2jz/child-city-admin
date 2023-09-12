@@ -5,9 +5,12 @@ import { useNavigate } from "react-router";
 import { routeNames } from "../../Routes/routeNames";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import { useMediaQuery } from "@mantine/hooks";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 820px)");
+
   const { setUser } = useContext(UserContext);
   return (
     <Flex
@@ -18,11 +21,11 @@ export const Header = () => {
     >
       <Image
         src={logo}
-        width={"80px"}
+        width={isMobile ? 40 : "80px"}
         onClick={() => navigate("/")}
         style={{ cursor: "pointer" }}
       />
-      <Title order={3} color={"#ff8087"}>
+      <Title order={isMobile ? 5 : 3} color={"#ff8087"}>
         Admin Panel
       </Title>
       <Flex
@@ -41,7 +44,7 @@ export const Header = () => {
         }}
       >
         <Logout />
-        <Text> Logout</Text>
+        {!isMobile && <Text> Logout</Text>}
       </Flex>
     </Flex>
   );

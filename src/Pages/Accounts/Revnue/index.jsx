@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import SelectMenu from "../../../components/SelectMenu";
-import { useStyles } from "../styles";
+import { useStyles } from "./styles";
 import { Columns, filterbyStatus } from "./TableHeaders";
 import PageHeader from "../../../components/PageHeader";
 import DataGrid from "../../../components/Table";
@@ -14,22 +14,20 @@ import { backendUrl } from "../../../constants/constants";
 import { routeNames } from "../../../Routes/routeNames";
 import { useNavigate } from "react-router";
 
-const ViewCategories = () => {
+const ViewRevenue = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [tableData, setTableData] = useState([
     {
       serialNo: 1,
-      title: "Boys",
-      description: "This is a short description.",
-      blocked: false,
-    },
-    {
-      serialNo: 2,
-      title: "Girls",
-      description: "This is a short description.",
-      blocked: true,
+      name: "Some Person",
+      productName: "Denim Jeans",
+      amount: "500",
+      quantity: "2",
+      payment: 3500,
+      address: "f-10 markaz, Islambad, Pakistan",
+      paymentStatus: true,
     },
   ]);
   const [search, setSearch] = useState("");
@@ -53,11 +51,11 @@ const ViewCategories = () => {
   });
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
-      return item?.title?.toLowerCase().includes(search.toLowerCase());
+      return item?.name?.toLowerCase().includes(search.toLowerCase());
     else
       return (
-        item?.title?.toLowerCase().includes(search.toLowerCase()) &&
-        item?.blocked === blockedFilter
+        item?.name?.toLowerCase().includes(search.toLowerCase()) &&
+        item?.paymentStatus === blockedFilter
       );
   });
   const handleClearFilters = () => {
@@ -66,7 +64,7 @@ const ViewCategories = () => {
   };
   return (
     <Container size="xl" p="sm">
-      <PageHeader label={"View Categories"} />
+      <PageHeader label={"View Revenue"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
           <Grid.Col md="6" lg="3">
@@ -92,18 +90,11 @@ const ViewCategories = () => {
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md={"6"} lg="4" style={{ textAlign: "end" }}>
-            <Button
-              label={"Add Category"}
-              leftIcon="plus"
-              onClick={() => navigate(routeNames.general.addCategory)}
-            />
-          </Grid.Col>
         </Grid>
         <DataGrid
           columns={Columns}
           data={filteredItems}
-          progressPending={status === "loading"}
+          // progressPending={status === "loading"}
           type="service"
         />
       </Container>
@@ -111,4 +102,4 @@ const ViewCategories = () => {
   );
 };
 
-export default ViewCategories;
+export default ViewRevenue;

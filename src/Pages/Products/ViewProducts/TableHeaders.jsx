@@ -1,7 +1,7 @@
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
-import ViewService from "./ViewCategory";
+import ViewService from "./ViewProduct";
 
 export const Columns = [
   {
@@ -12,7 +12,7 @@ export const Columns = [
   },
   {
     name: "",
-    selector: (row) => row.coverImage,
+    selector: (row) => row.image,
     center: true,
     width: "40px",
     cell: (row) => <TableImageView src={row?.coverImage} />,

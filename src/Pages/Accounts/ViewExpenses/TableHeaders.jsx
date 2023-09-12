@@ -1,7 +1,8 @@
+import { Anchor, Badge } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
-import ViewService from "./ViewCategory";
+import ViewService from "./ViewExpense";
 
 export const Columns = [
   {
@@ -11,45 +12,39 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "",
-    selector: (row) => row.coverImage,
-    center: true,
-    width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
-  },
-  {
     name: "Title",
-    selector: (row) => row.title,
+    selector: (row) => row.name,
     sortable: true,
     // center: true,
-    width: "250px",
+    grow:1
   },
   {
-    name: "Short Description",
-    selector: (row) => row.description,
+    name: "Expense Type",
+    selector: (row) => row.type,
     sortable: true,
     // center: true,
-    width: "300px",
+    width: "200px",
   },
   {
-    name: "Status",
-    selector: (row) => row.blocked,
-    width: "150px",
+    name: "Amount",
+    selector: (row) => row.amount,
     sortable: true,
     center: true,
+    width: "150px",
+  },
+  {
+    name: "Receipt",
+    selector: (row) => row.payment,
+    sortable: true,
+    width: "120px",
     cell: (row) => (
-      <StatusToggle
-        status={row.blocked}
-        id={row._id}
-        type={"service"}
-        queryName="fetchServices"
-      />
+      <Anchor color="primary.0">{row?.receipt || "Receipt"}</Anchor>
     ),
   },
   {
     name: "Actions",
     center: true,
-    width: "200px",
+    width: "150px",
     cell: (row) => (
       <ActionIcons
         rowData={row}
@@ -57,7 +52,7 @@ export const Columns = [
         del={true}
         edit={true}
         viewData={<ViewService rowData={row} />}
-        type="Category"
+        type="Expenses"
       />
     ),
   },
@@ -65,6 +60,6 @@ export const Columns = [
 
 export const filterbyStatus = [
   { label: "All", value: null },
-  { label: "Blocked", value: true },
-  { label: "Unblocked", value: false },
+  { label: "Paid", value: true },
+  { label: "Pending", value: false },
 ];

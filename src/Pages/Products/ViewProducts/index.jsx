@@ -18,29 +18,40 @@ const ViewProducts = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([
+    {
+      serialNo: 1,
+      title: "Boys Denim Jeans",
+      category: "Boys",
+      sku: "CE12312",
+      price: 1999,
+      blocked: false,
+      quantity: 40,
+      colors: ["Red", "Pink", "Yellow"],
+      sizes: ["1-2Y", "2-3Y"],
+      season: "Winters Collections",
+      description: "This is a description.",
+    },
+  ]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery(
-    "fetchServices",
-    () => {
-      return axios.get(backendUrl + "/api/v1/service", {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      });
-    },
-    {
-      onSuccess: (res) => {
-        const data = res.data.data;
-        data.map((item) => {
-          item.serialNo = data.indexOf(item) + 1;
-        });
-        setTableData(data);
-      },
-    }
-  );
+  const { status } = useQuery("fetchServices", () => {
+    //   return axios.get(backendUrl + "/api/v1/service", {
+    //     headers: {
+    //       authorization: `Bearer ${user.token}`,
+    //     },
+    //   });
+    // },
+    // {
+    //   onSuccess: (res) => {
+    //     const data = res.data.data;
+    //     data.map((item) => {
+    //       item.serialNo = data.indexOf(item) + 1;
+    //     });
+    //     setTableData(data);
+    //   },
+  });
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
       return item?.title?.toLowerCase().includes(search.toLowerCase());
