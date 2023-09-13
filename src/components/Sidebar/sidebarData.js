@@ -29,6 +29,14 @@ export const sidebarData = [
     ],
   },
   {
+    label: "Sales",
+    icon: BrandVite,
+    links: [
+      { label: "Add Sale", link: routeNames.general.addSale },
+      { label: "View Sales", link: routeNames.general.viewSales },
+    ],
+  },
+  {
     label: "Accounts",
     icon: BrandVite,
     links: [

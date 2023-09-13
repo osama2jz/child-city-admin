@@ -11,13 +11,6 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "",
-    selector: (row) => row.coverImage,
-    center: true,
-    width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
-  },
-  {
     name: "Title",
     selector: (row) => row.title,
     sortable: true,
@@ -25,8 +18,8 @@ export const Columns = [
     width: "250px",
   },
   {
-    name: "Sub Title",
-    selector: (row) => row.subTitle,
+    name: "Amount (%)",
+    selector: (row) => row.sale,
     sortable: true,
     // center: true,
     width: "250px",
@@ -60,11 +53,11 @@ export const Columns = [
     cell: (row) => (
       <ActionIcons
         rowData={row}
-        view={true}
+        // view={true}
         del={true}
         edit={true}
         viewData={<ViewService rowData={row} />}
-        type="Category"
+        type="Sale"
       />
     ),
   },

@@ -14,6 +14,8 @@ import ViewProducts from "./Pages/Products/ViewProducts";
 import ViewRevenue from "./Pages/Accounts/Revnue";
 import AddExpenses from "./Pages/Accounts/AddExpenses";
 import ViewExpenses from "./Pages/Accounts/ViewExpenses";
+import { AddSale } from "./Pages/Sales/AddSale";
+import ViewSales from "./Pages/Sales/ViewSales";
 
 function App() {
   return (
@@ -38,7 +40,12 @@ function App() {
         <Route path={routeNames.general.settings} element={<Settings />} />
         <Route path={routeNames.general.revenue} element={<ViewRevenue />} />
         <Route path={routeNames.general.aboutUs} element={<AboutUs />} />
-        <Route path={routeNames.general.viewExpesnes} element={<ViewExpenses />} />
+        <Route
+          path={routeNames.general.viewExpesnes}
+          element={<ViewExpenses />}
+        />
+        <Route path={routeNames.general.addSale} element={<AddSale />} />
+        <Route path={routeNames.general.viewSales} element={<ViewSales />} />
         <Route
           path={routeNames.general.addExpenses}
           element={<AddExpenses />}

@@ -22,7 +22,7 @@ const MultipleDropzone = ({
   maxFiles = 1,
   form,
   fieldName,
-  type,
+  type = "image",
   coverImageEnabled = true,
 }) => {
   const isMobile = useMediaQuery("(max-width: 820px)");

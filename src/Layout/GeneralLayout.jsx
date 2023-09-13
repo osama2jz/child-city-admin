@@ -82,9 +82,9 @@ const GeneralLayout = () => {
       <Container
         bg="white"
         m="auto"
-        p="md"
-        size={"xl"}
-        mih={"77vh"}
+        p="xs"
+        size={"lg"}
+        mih={"79vh"}
         style={{ borderRadius: "10px" }}
       >
         {allowed && <Outlet />}

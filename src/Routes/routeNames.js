@@ -8,6 +8,8 @@ export const routeNames = {
     viewProducts: "/view-products",
     addExpenses: "/add-expenses",
     viewExpesnes: "/view-expenses",
+    addSale:'/add-sale',
+    viewSales:'/view-sales',
     revenue: "/view-revenue",
     orders: "/orders",
     settings: "/settings",

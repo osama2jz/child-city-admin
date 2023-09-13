@@ -1,20 +1,16 @@
-import axios from "axios";
-import { Container, Group } from "@mantine/core";
-import { useMutation } from "react-query";
+import { Container, Group, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import InputField from "../../../components/InputField";
-import TextArea from "../../../components/TextArea";
-import Button from "../../../components/Button";
-import PageHeader from "../../../components/PageHeader";
-import { backendUrl } from "../../../constants/constants";
 import { useContext, useEffect } from "react";
-import { UserContext } from "../../../contexts/UserContext";
-import DropZone from "../../../components/Dropzone";
+import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
+import PageHeader from "../../../components/PageHeader";
+import TextArea from "../../../components/TextArea";
+import { UserContext } from "../../../contexts/UserContext";
 
-export const AddCategory = () => {
+export const AddSale = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -23,23 +19,20 @@ export const AddCategory = () => {
     validateInputOnChange: true,
     initialValues: {
       title: "",
-      subTitle: "",
+      sale: "",
       description: "",
-      coverImage: null,
+      blocked: true,
     },
 
     validate: {
       title: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
-          : "Please enter category title",
-      subTitle: (value) =>
-        value?.length > 1 && value?.length < 30
-          ? null
-          : "Please enter category sub title",
+          : "Please enter Sale title",
+      sale: (value) =>
+        value?.length > 1 && value > 0 ? null : "Please enter sale percent",
       description: (value) =>
-        value?.length > 0 ? null : "Please enter category description",
-      coverImage: (value) => (value ? null : "Please upload a cover Image"),
+        value?.length > 0 ? null : "Please enter Sale description",
     },
   });
 
@@ -87,23 +80,24 @@ export const AddCategory = () => {
   });
   return (
     <Container fluid>
-      <PageHeader label={state?.isUpdate ? "Edit Category" : "Add Category"} />
+      <PageHeader label={state?.isUpdate ? "Edit Sale" : "Add Sale"} />
       <form
         onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
       >
         <InputField
           label={"Title"}
-          placeholder={"Enter Category Title"}
+          placeholder={"Enter Sale Title"}
           form={form}
           withAsterisk
           validateName={"title"}
         />
         <InputField
-          label={"Sub Title"}
-          placeholder={"Enter Category Sub Title"}
+          label={"Sale Percent"}
+          placeholder={"Enter Sale Amount in Percent"}
           form={form}
           withAsterisk
-          validateName={"subTitle"}
+          type="number"
+          validateName={"sale"}
         />
         <TextArea
           label={"Short Description"}
@@ -113,22 +107,20 @@ export const AddCategory = () => {
           withAsterisk
           validateName={"description"}
         />
-        <Group position="center">
-          <DropZone
-            form={form}
-            folderName={"service"}
-            name={"coverImage"}
-            label="Cover Image"
-          />
-        </Group>
+        <Switch
+          label="Default Activation Status"
+          defaultChecked={!form.values.blocked}
+          {...form.getInputProps("blocked")}
+          labelPosition="left"
+        />
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}
             variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewCategory)}
+            onClick={() => navigate(routeNames.general.viewSales)}
           />
           <Button
-            label={state?.isUpdate ? "Edit Category" : "Add Category"}
+            label={state?.isUpdate ? "Edit Sale" : "Add Sale"}
             type={"submit"}
             loading={handleAddService.isLoading}
           />

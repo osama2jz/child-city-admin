@@ -14,22 +14,22 @@ import { backendUrl } from "../../../constants/constants";
 import { routeNames } from "../../../Routes/routeNames";
 import { useNavigate } from "react-router";
 
-const ViewCategories = () => {
+const ViewSales = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [tableData, setTableData] = useState([
     {
       serialNo: 1,
-      title: "Boys",
-      subTitle: "Clothing",
+      title: "Summer",
+      sale: "10",
       description: "This is a short description.",
       blocked: false,
     },
     {
       serialNo: 2,
       title: "Girls",
-      subTitle: "Clothing",
+      sale: "20",
       description: "This is a short description.",
       blocked: true,
     },
@@ -68,7 +68,7 @@ const ViewCategories = () => {
   };
   return (
     <Container size="xl" p="sm">
-      <PageHeader label={"View Categories"} />
+      <PageHeader label={"View Sales"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
           <Grid.Col md="6" lg="3">
@@ -96,9 +96,9 @@ const ViewCategories = () => {
           </Grid.Col>
           <Grid.Col sm="6" md={"6"} lg="4" style={{ textAlign: "end" }}>
             <Button
-              label={"Add Category"}
+              label={"Add Sale"}
               leftIcon="plus"
-              onClick={() => navigate(routeNames.general.addCategory)}
+              onClick={() => navigate(routeNames.general.addSale)}
             />
           </Grid.Col>
         </Grid>
@@ -113,4 +113,4 @@ const ViewCategories = () => {
   );
 };
 
-export default ViewCategories;
+export default ViewSales;

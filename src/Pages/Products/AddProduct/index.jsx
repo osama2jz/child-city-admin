@@ -7,8 +7,8 @@ import InputField from "../../../components/InputField";
 import TextArea from "../../../components/TextArea";
 import Button from "../../../components/Button";
 import PageHeader from "../../../components/PageHeader";
-import { backendUrl } from "../../../constants/constants";
-import { useContext, useEffect } from "react";
+import { backendUrl, colors } from "../../../constants/constants";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/UserContext";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
@@ -20,6 +20,7 @@ export const AddProduct = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
+  const [colorss, setColors] = useState(colors);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -136,11 +137,19 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <MultiSelect
-              data={["Red", "Yellow", "Blue", "Black", "Purple", "Pink"]}
+              data={colorss}
               label="Select Colors"
               placeholder="Select Colors"
               form={form}
+              creatable={true}
+              searchable={true}
               validateName="colors"
+              getCreateLabel={(query) => `+ Create ${query}`}
+              onCreate={(query) => {
+                const item = query;
+                setColors((current) => [...current, item]);
+                return item;
+              }}
             />
           </Grid.Col>
           <Grid.Col sm={6}>
