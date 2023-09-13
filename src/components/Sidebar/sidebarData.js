@@ -4,6 +4,7 @@ import {
   Category2,
   Graph,
   Settings,
+  Users,
 } from "tabler-icons-react";
 import { routeNames } from "../../Routes/routeNames";
 export const sidebarData = [
@@ -29,6 +30,11 @@ export const sidebarData = [
     ],
   },
   {
+    label: "Users",
+    icon: Users,
+    link: routeNames.general.users,
+  },
+  {
     label: "Sales",
     icon: BrandVite,
     links: [
@@ -36,6 +42,7 @@ export const sidebarData = [
       { label: "View Sales", link: routeNames.general.viewSales },
     ],
   },
+
   {
     label: "Accounts",
     icon: BrandVite,

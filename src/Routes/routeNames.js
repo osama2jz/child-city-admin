@@ -14,5 +14,6 @@ export const routeNames = {
     orders: "/orders",
     settings: "/settings",
     aboutUs: "/about-us",
+    users:"/users"
   },
 };
