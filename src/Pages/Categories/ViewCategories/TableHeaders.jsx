@@ -1,7 +1,7 @@
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
-import ViewService from "./ViewCategory";
+import ViewCategory from "./ViewCategory";
 
 export const Columns = [
   {
@@ -12,24 +12,24 @@ export const Columns = [
   },
   {
     name: "",
-    selector: (row) => row.coverImage,
+    selector: (row) => row.image,
     center: true,
     width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
+    cell: (row) => <TableImageView src={row?.image} />,
   },
   {
     name: "Title",
     selector: (row) => row.title,
     sortable: true,
     // center: true,
-    width: "250px",
+    width: "200px",
   },
   {
     name: "Sub Title",
     selector: (row) => row.subTitle,
     sortable: true,
     // center: true,
-    width: "250px",
+    width: "200px",
   },
   {
     name: "Short Description",
@@ -48,8 +48,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"service"}
-        queryName="fetchServices"
+        type={"Category"}
+        queryName="fetchCategories"
       />
     ),
   },
@@ -61,9 +61,9 @@ export const Columns = [
       <ActionIcons
         rowData={row}
         view={true}
-        del={true}
+        // del={true}
         edit={true}
-        viewData={<ViewService rowData={row} />}
+        viewData={<ViewCategory rowData={row} />}
         type="Category"
       />
     ),

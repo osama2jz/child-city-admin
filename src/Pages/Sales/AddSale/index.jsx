@@ -1,19 +1,24 @@
 import { Container, Group, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useContext, useEffect } from "react";
-import { useMutation } from "react-query";
+import { useContext, useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
 import Button from "../../../components/Button";
 import InputField from "../../../components/InputField";
 import PageHeader from "../../../components/PageHeader";
 import TextArea from "../../../components/TextArea";
+import MultiSelect from "../../../components/MultiSelect";
 import { UserContext } from "../../../contexts/UserContext";
+import axios from "axios";
+import { backendUrl } from "../../../constants/constants";
+import { showNotification } from "@mantine/notifications";
 
 export const AddSale = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
+  const [categories, setCategories] = useState([]);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -21,7 +26,7 @@ export const AddSale = () => {
       title: "",
       sale: "",
       description: "",
-      blocked: true,
+      category: "",
     },
 
     validate: {
@@ -29,8 +34,9 @@ export const AddSale = () => {
         value?.length > 1 && value?.length < 30
           ? null
           : "Please enter Sale title",
-      sale: (value) =>
-        value?.length > 1 && value > 0 ? null : "Please enter sale percent",
+      sale: (value) => (value > 0 ? null : "Please enter sale percent"),
+      category: (value) =>
+        value?.length > 0 ? null : "Please select sale category",
       description: (value) =>
         value?.length > 0 ? null : "Please enter Sale description",
     },
@@ -39,57 +45,75 @@ export const AddSale = () => {
   useEffect(() => {
     if (state?.isUpdate) {
       form.setValues(state.data);
+      form.setFieldValue("category", state.data.category.map((obj) => obj._id.toString()))
     }
   }, [state]);
-  const handleAddService = useMutation((values) => {
-    //   if (state?.isUpdate)
-    //     return axios.patch(
-    //       `${backendUrl + `/api/v1/service/${state?.data?._id}`}`,
-    //       values,
-    //       {
-    //         headers: {
-    //           authorization: `Bearer ${user.token}`,
-    //         },
-    //       }
-    //     );
-    //   else
-    //     return axios.post(`${backendUrl + "/api/v1/service"}`, values, {
-    //       headers: {
-    //         authorization: `Bearer ${user.token}`,
-    //       },
-    //     });
-    // },
-    // {
-    //   onSuccess: (response) => {
-    //     if (response.data?.success) {
-    //       showNotification({
-    //         title: "Success",
-    //         message: response?.data?.message,
-    //         color: "green",
-    //       });
-    //       navigate(routeNames.general.viewService);
-    //       form.reset();
-    //     } else {
-    //       showNotification({
-    //         title: "Error",
-    //         message: response?.data?.message,
-    //         color: "red",
-    //       });
-    //     }
-    //   },
-  });
+  const handleAddSale = useMutation(
+    (values) => {
+      if (state?.isUpdate)
+        return axios.put(
+          `${backendUrl + `/sale/${state?.data?._id}`}`,
+          values
+          // {
+          //   headers: {
+          //     authorization: `Bearer ${user.token}`,
+          //   },
+          // }
+        );
+      else
+        return axios.post(`${backendUrl + "/sale"}`, values, {
+          // headers: {
+          //   authorization: `Bearer ${user.token}`,
+          // },
+        });
+    },
+    {
+      onSuccess: (response) => {
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.viewSales);
+        form.reset();
+      },
+    }
+  );
+  const { status } = useQuery(
+    "fetchCategories",
+    () => {
+      return axios.get(backendUrl + "/category", {});
+    },
+    {
+      onSuccess: (res) => {
+        let cat = res.data.data
+          .filter((obj) => !obj?.blocked)
+          .map((obj) => {
+            if (!obj?.blocked) return { label: obj.title, value: obj?._id };
+          });
+
+        setCategories(cat);
+      },
+    }
+  );
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Sale" : "Add Sale"} />
-      <form
-        onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
-      >
+      <form onSubmit={form.onSubmit((values) => handleAddSale.mutate(values))}>
         <InputField
           label={"Title"}
           placeholder={"Enter Sale Title"}
           form={form}
           withAsterisk
           validateName={"title"}
+        />
+        <MultiSelect
+          label="Select Category"
+          placeholder="Select Categories"
+          withAsterisk
+          data={categories}
+          form={form}
+          validateName="category"
         />
         <InputField
           label={"Sale Percent"}
@@ -107,12 +131,12 @@ export const AddSale = () => {
           withAsterisk
           validateName={"description"}
         />
-        <Switch
+        {/* <Switch
           label="Default Activation Status"
           defaultChecked={!form.values.blocked}
           {...form.getInputProps("blocked")}
           labelPosition="left"
-        />
+        /> */}
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}
@@ -122,7 +146,7 @@ export const AddSale = () => {
           <Button
             label={state?.isUpdate ? "Edit Sale" : "Add Sale"}
             type={"submit"}
-            loading={handleAddService.isLoading}
+            loading={handleAddSale.isLoading}
           />
         </Group>
       </form>

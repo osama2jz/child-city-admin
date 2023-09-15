@@ -18,34 +18,33 @@ const Users = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([
-    {
-      serialNo: 1,
-      name: "Some Person",
-      email: "example@gmail.com",
-      phone: "+932342423",
-      blocked: false,
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery("fetchServices", () => {
-    //   return axios.get(backendUrl + "/api/v1/service", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     const data = res.data.data;
-    //     data.map((item) => {
-    //       item.serialNo = data.indexOf(item) + 1;
-    //     });
-    //     setTableData(data);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchUsers",
+    () => {
+      return axios.get(backendUrl + "/user", {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
+      });
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        let newData = data
+          .filter((obj) => !obj.isAdmin)
+          .map((item, ind) => {
+            item.serialNo = ind + 1;
+            return item;
+          });
+
+        setTableData(newData);
+      },
+    }
+  );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
       return item?.name?.toLowerCase().includes(search.toLowerCase());
@@ -64,7 +63,7 @@ const Users = () => {
       <PageHeader label={"View Users"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col md="6" lg="3">
+          <Grid.Col md="6" lg="5">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -72,7 +71,7 @@ const Users = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="6" lg="3">
+          <Grid.Col md="6" lg="5">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -80,10 +79,11 @@ const Users = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"2"} style={{ textAlign: "end" }}>
+          <Grid.Col md="12" lg={"2"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
+              fullWidth
               onClick={handleClearFilters}
             />
           </Grid.Col>
@@ -91,7 +91,7 @@ const Users = () => {
         <DataGrid
           columns={Columns}
           data={filteredItems}
-          // progressPending={status === "loading"}
+          progressPending={status === "loading"}
           type="service"
         />
       </Container>

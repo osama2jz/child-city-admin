@@ -1,4 +1,4 @@
-export const backendUrl = "https://backend.decimalsolution.com";
+export const backendUrl = "http://localhost:6969";
 export const colors = [
   "Red",
   "Orange",

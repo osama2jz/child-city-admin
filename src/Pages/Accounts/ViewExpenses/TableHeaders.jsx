@@ -16,7 +16,7 @@ export const Columns = [
     selector: (row) => row.name,
     sortable: true,
     // center: true,
-    grow:1
+    grow: 1,
   },
   {
     name: "Expense Type",
@@ -34,11 +34,13 @@ export const Columns = [
   },
   {
     name: "Receipt",
-    selector: (row) => row.payment,
+    selector: (row) => row.image,
     sortable: true,
     width: "120px",
     cell: (row) => (
-      <Anchor color="primary.0">{row?.receipt || "Receipt"}</Anchor>
+      <Anchor color="primary.0" href={row?.image} target="_blank">
+        Receipt
+      </Anchor>
     ),
   },
   {
@@ -52,7 +54,7 @@ export const Columns = [
         del={true}
         edit={true}
         viewData={<ViewService rowData={row} />}
-        type="Expenses"
+        type="Expense"
       />
     ),
   },

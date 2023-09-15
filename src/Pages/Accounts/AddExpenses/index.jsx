@@ -26,17 +26,16 @@ const AddExpenses = () => {
       name: "",
       description: "",
       type: "",
-      amount: "",
+      amount: null,
       image: null,
     },
 
     validate: {
-      title: (value) =>
+      name: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
           : "Please enter expenses title",
-      amount: (value) =>
-        value?.length > 0 && amount > 0 ? null : "Please enter amount",
+      amount: (value) => (value > 0 ? null : "Please enter amount"),
       description: (value) =>
         value?.length > 0 ? null : "Please enter expenses description",
     },
@@ -47,48 +46,42 @@ const AddExpenses = () => {
       form.setValues(state.data);
     }
   }, [state]);
-  const handleAddService = useMutation((values) => {
-    //   if (state?.isUpdate)
-    //     return axios.patch(
-    //       `${backendUrl + `/api/v1/service/${state?.data?._id}`}`,
-    //       values,
-    //       {
-    //         headers: {
-    //           authorization: `Bearer ${user.token}`,
-    //         },
-    //       }
-    //     );
-    //   else
-    //     return axios.post(`${backendUrl + "/api/v1/service"}`, values, {
-    //       headers: {
-    //         authorization: `Bearer ${user.token}`,
-    //       },
-    //     });
-    // },
-    // {
-    //   onSuccess: (response) => {
-    //     if (response.data?.success) {
-    //       showNotification({
-    //         title: "Success",
-    //         message: response?.data?.message,
-    //         color: "green",
-    //       });
-    //       navigate(routeNames.general.viewService);
-    //       form.reset();
-    //     } else {
-    //       showNotification({
-    //         title: "Error",
-    //         message: response?.data?.message,
-    //         color: "red",
-    //       });
-    //     }
-    //   },
-  });
+  const handleAddExpenses = useMutation(
+    (values) => {
+      if (state?.isUpdate)
+        return axios.put(
+          `${backendUrl + `/expense/${state?.data?._id}`}`,
+          values
+          // {
+          //   headers: {
+          //     authorization: `Bearer ${user.token}`,
+          //   },
+          // }
+        );
+      else
+        return axios.post(`${backendUrl + "/expense"}`, values, {
+          // headers: {
+          //   authorization: `Bearer ${user.token}`,
+          // },
+        });
+    },
+    {
+      onSuccess: (response) => {
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.viewExpesnes);
+        form.reset();
+      },
+    }
+  );
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Expenses" : "Add Expenses"} />
       <form
-        onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
+        onSubmit={form.onSubmit((values) => handleAddExpenses.mutate(values))}
       >
         <InputField
           label={"Title"}
@@ -125,8 +118,8 @@ const AddExpenses = () => {
         <Group position="center">
           <DropZone
             form={form}
-            folderName={"service"}
-            name={"coverImage"}
+            folderName={"Expense"}
+            name={"image"}
             label="Image"
           />
         </Group>
@@ -139,7 +132,7 @@ const AddExpenses = () => {
           <Button
             label={state?.isUpdate ? "Edit Expenses" : "Add Expenses"}
             type={"submit"}
-            loading={handleAddService.isLoading}
+            loading={handleAddExpenses.isLoading}
           />
         </Group>
       </form>

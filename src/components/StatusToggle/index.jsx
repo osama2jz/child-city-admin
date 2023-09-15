@@ -17,12 +17,16 @@ const StatusToggle = ({ status, id, type, queryName }) => {
   //to change status
   const handleStatusChange = useMutation(
     async () => {
-      const link = backendUrl + `/api/v1/${type}/${id}`;
-      return axios.patch(link, { blocked: !blocked },{
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      });
+      const link = backendUrl + `/${type.toLowerCase()}/changeStatus/${id}`;
+      return axios.post(
+        link,
+        { blocked: !blocked },
+        {
+          // headers: {
+          //   authorization: `Bearer ${user.token}`,
+          // },
+        }
+      );
     },
     {
       onSuccess: (res) => {
@@ -47,7 +51,6 @@ const StatusToggle = ({ status, id, type, queryName }) => {
   if (handleStatusChange.isLoading) {
     return <Loader style={{ margin: "auto" }} size="sm" />;
   }
-  console.log(status);
   return (
     <Menu
       trigger="hover"

@@ -22,24 +22,17 @@ const ViewProduct = ({ rowData }) => {
     >
       <Stack align="center" justify="center">
         <Carousel maw={320} mx="auto" withIndicators height={200}>
-          <Carousel.Slide>
-            <Image
-              src={rowData?.img}
-              width="320px"
-              height={"200px"}
-              withPlaceholder
-              fit="fill"
-            />
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <Image
-              src={rowData?.img}
-              width="320px"
-              height={"200px"}
-              withPlaceholder
-              fit="fill"
-            />
-          </Carousel.Slide>
+          {rowData?.images.map((obj, ind) => (
+            <Carousel.Slide>
+              <Image
+                src={obj}
+                width="320px"
+                height={"200px"}
+                withPlaceholder
+                fit="fill"
+              />
+            </Carousel.Slide>
+          ))}
         </Carousel>
         <Text fw={"bold"} color="primary.0" fz="xl" my={"md"} align="center">
           {rowData?.title}
@@ -48,7 +41,7 @@ const ViewProduct = ({ rowData }) => {
       <Stack spacing={"xs"} w={isMobile ? "100%" : "50%"}>
         <Group position="apart">
           <Title order={4}>Category</Title>
-          <Text>{rowData?.category}</Text>
+          <Text>{rowData?.category?.title}</Text>
         </Group>
         <Group position="apart">
           <Title order={5}>SKU</Title>

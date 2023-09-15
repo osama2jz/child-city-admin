@@ -33,22 +33,25 @@ const ViewRevenue = () => {
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery("fetchServices", () => {
-    //   return axios.get(backendUrl + "/api/v1/service", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     const data = res.data.data;
-    //     data.map((item) => {
-    //       item.serialNo = data.indexOf(item) + 1;
-    //     });
-    //     setTableData(data);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchRevenue",
+    () => {
+      return axios.get(backendUrl + "/revenue", {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
+      });
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        data.map((item) => {
+          item.serialNo = data.indexOf(item) + 1;
+        });
+        setTableData(data);
+      },
+    }
+  );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
       return item?.name?.toLowerCase().includes(search.toLowerCase());

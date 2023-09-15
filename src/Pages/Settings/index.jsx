@@ -2,9 +2,9 @@ import { Container, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { useLocation, useNavigate } from "react-router";
+import { useContext } from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router";
 import { routeNames } from "../../Routes/routeNames";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
@@ -15,7 +15,6 @@ import { UserContext } from "../../contexts/UserContext";
 export const Settings = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-  let { state } = useLocation();
 
   const form = useForm({
     validateInputOnChange: true,
@@ -26,38 +25,44 @@ export const Settings = () => {
     },
 
     validate: {
-      oldPassword: (value) => (value?.length > 0 ? null : "Please enter old password"),
+      oldPassword: (value) =>
+        value?.length > 0 ? null : "Please enter old password",
       newPassword: (value) =>
         value?.length > 0 ? null : "Please enter new password",
-      confirmPass: (value) =>
-        value?.length > 0 ? null : "Please enter confirm password",
+      confirmPass: (value, values) =>
+        value?.length > 0 && values?.newPassword === value
+          ? null
+          : "Please enter confirm password",
     },
   });
 
   const handleChangePassword = useMutation(
     (values) => {
-      return axios.patch(`${backendUrl + "/api/v1/auth/updateProfile"}`, values, {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
-      });
+      return axios.put(
+        `${backendUrl + `/user/changePassword/${user?.id}`}`,
+        values,
+        {
+          // headers: {
+          //   authorization: `Bearer ${user.token}`,
+          // },
+        }
+      );
     },
     {
       onSuccess: (response) => {
-        if (response.data?.success) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-          form.reset();
-        } else {
-          showNotification({
-            title: "Error",
-            message: response?.data?.message,
-            color: "red",
-          });
-        }
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        form.reset();
+      },
+      onError: (err) => {
+        showNotification({
+          title: "Error",
+          message: "Something Went Wrong",
+          color: "red",
+        });
       },
     }
   );

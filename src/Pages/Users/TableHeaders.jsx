@@ -25,7 +25,7 @@ export const Columns = [
   },
   {
     name: "Phone Number",
-    selector: (row) => row.phone,
+    selector: (row) => row.phoneNumber,
     sortable: true,
     center: true,
     width: "200px",
@@ -40,8 +40,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"order"}
-        queryName="fetchServices"
+        type={"User"}
+        queryName="fetchUsers"
       />
     ),
   },

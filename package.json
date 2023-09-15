@@ -36,7 +36,8 @@
     "react-input-mask": "^2.0.4",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.2",
-    "tabler-icons-react": "^1.56.0"
+    "tabler-icons-react": "^1.56.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

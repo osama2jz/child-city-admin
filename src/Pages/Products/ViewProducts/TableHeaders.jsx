@@ -15,7 +15,7 @@ export const Columns = [
     selector: (row) => row.image,
     center: true,
     width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
+    cell: (row) => <TableImageView src={row?.images?.[0]} />,
   },
   {
     name: "Title",
@@ -26,7 +26,7 @@ export const Columns = [
   },
   {
     name: "Category",
-    selector: (row) => row.category,
+    selector: (row) => row.category?.title,
     sortable: true,
     center: true,
     width: "180px",
@@ -62,8 +62,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"service"}
-        queryName="fetchServices"
+        type={"Product"}
+        queryName="fetchProducts"
       />
     ),
   },

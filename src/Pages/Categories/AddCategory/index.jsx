@@ -25,7 +25,7 @@ export const AddCategory = () => {
       title: "",
       subTitle: "",
       description: "",
-      coverImage: null,
+      image: null,
     },
 
     validate: {
@@ -39,7 +39,7 @@ export const AddCategory = () => {
           : "Please enter category sub title",
       description: (value) =>
         value?.length > 0 ? null : "Please enter category description",
-      coverImage: (value) => (value ? null : "Please upload a cover Image"),
+      image: (value) => (value ? null : "Please upload a cover Image"),
     },
   });
 
@@ -48,48 +48,50 @@ export const AddCategory = () => {
       form.setValues(state.data);
     }
   }, [state]);
-  const handleAddService = useMutation((values) => {
-    //   if (state?.isUpdate)
-    //     return axios.patch(
-    //       `${backendUrl + `/api/v1/service/${state?.data?._id}`}`,
-    //       values,
-    //       {
-    //         headers: {
-    //           authorization: `Bearer ${user.token}`,
-    //         },
-    //       }
-    //     );
-    //   else
-    //     return axios.post(`${backendUrl + "/api/v1/service"}`, values, {
-    //       headers: {
-    //         authorization: `Bearer ${user.token}`,
-    //       },
-    //     });
-    // },
-    // {
-    //   onSuccess: (response) => {
-    //     if (response.data?.success) {
-    //       showNotification({
-    //         title: "Success",
-    //         message: response?.data?.message,
-    //         color: "green",
-    //       });
-    //       navigate(routeNames.general.viewService);
-    //       form.reset();
-    //     } else {
-    //       showNotification({
-    //         title: "Error",
-    //         message: response?.data?.message,
-    //         color: "red",
-    //       });
-    //     }
-    //   },
-  });
+  const handleAddCategory = useMutation(
+    (values) => {
+      if (state?.isUpdate)
+        return axios.put(
+          `${backendUrl + `/category/${state?.data?._id}`}`,
+          values
+          // {
+          //   headers: {
+          //     authorization: `Bearer ${user.token}`,
+          //   },
+          // }
+        );
+      else
+        return axios.post(`${backendUrl + "/category"}`, values, {
+          // headers: {
+          //   authorization: `Bearer ${user.token}`,
+          // },
+        });
+    },
+    {
+      onSuccess: (response) => {
+        if (response?.status == 200) {
+          showNotification({
+            title: "Success",
+            message: response?.data?.message,
+            color: "green",
+          });
+          navigate(routeNames.general.viewCategory);
+          form.reset();
+        } else {
+          showNotification({
+            title: "Error",
+            message: response?.data?.message,
+            color: "red",
+          });
+        }
+      },
+    }
+  );
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Category" : "Add Category"} />
       <form
-        onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
+        onSubmit={form.onSubmit((values) => handleAddCategory.mutate(values))}
       >
         <InputField
           label={"Title"}
@@ -116,8 +118,8 @@ export const AddCategory = () => {
         <Group position="center">
           <DropZone
             form={form}
-            folderName={"service"}
-            name={"coverImage"}
+            folderName={"category"}
+            name={"image"}
             label="Cover Image"
           />
         </Group>
@@ -130,7 +132,7 @@ export const AddCategory = () => {
           <Button
             label={state?.isUpdate ? "Edit Category" : "Add Category"}
             type={"submit"}
-            loading={handleAddService.isLoading}
+            loading={handleAddCategory.isLoading}
           />
         </Group>
       </form>

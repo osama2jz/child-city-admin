@@ -36,22 +36,21 @@ const ViewProducts = () => {
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery("fetchServices", () => {
-    //   return axios.get(backendUrl + "/api/v1/service", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     const data = res.data.data;
-    //     data.map((item) => {
-    //       item.serialNo = data.indexOf(item) + 1;
-    //     });
-    //     setTableData(data);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchProducts",
+    () => {
+      return axios.get(backendUrl + "/product", {});
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        data.map((item) => {
+          item.serialNo = data.indexOf(item) + 1;
+        });
+        setTableData(data);
+      },
+    }
+  );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
       return item?.title?.toLowerCase().includes(search.toLowerCase());
@@ -70,7 +69,7 @@ const ViewProducts = () => {
       <PageHeader label={"View Products"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col md="6" lg="3">
+          <Grid.Col md="6" lg="4">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -78,7 +77,7 @@ const ViewProducts = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="6" lg="3">
+          <Grid.Col md="6" lg="4">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -86,16 +85,18 @@ const ViewProducts = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"2"} style={{ textAlign: "end" }}>
+          <Grid.Col sm="6" lg={"2"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
+              fullWidth
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md={"6"} lg="4" style={{ textAlign: "end" }}>
+          <Grid.Col sm="6" lg="2">
             <Button
               label={"Add Product"}
+              fullWidth
               leftIcon="plus"
               onClick={() => navigate(routeNames.general.addProduct)}
             />

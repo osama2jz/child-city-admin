@@ -18,6 +18,14 @@ export const Columns = [
     width: "250px",
   },
   {
+    name: "Categories",
+    selector: (row) => row.category,
+    sortable: true,
+    // center: true,
+    width: "250px",
+    cell: (row) => row.category.map((obj) => obj.title).join(", "),
+  },
+  {
     name: "Amount (%)",
     selector: (row) => row.sale,
     sortable: true,
@@ -41,8 +49,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"service"}
-        queryName="fetchServices"
+        type={"Sale"}
+        queryName="fetchSales"
       />
     ),
   },

@@ -1,10 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { v4 as uuidv4 } from "uuid";
 // import { getAnalytics } from "firebase/analytics";
 import {
   getDownloadURL,
   getStorage,
   ref,
+  uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
 
@@ -23,7 +25,12 @@ export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 // const analytics = getAnalytics(app);
 
-export const uploadSingleFile = ({ file, folderName, urlSetter, setProgress }) => {
+export const uploadSingleFile = ({
+  file,
+  folderName,
+  urlSetter,
+  setProgress,
+}) => {
   folderName = folderName || "uploads";
   if (!file) return;
   const storageRef = ref(storage, `/${folderName}/${file.name}`);
@@ -45,4 +52,26 @@ export const uploadSingleFile = ({ file, folderName, urlSetter, setProgress }) =
       );
     }
   );
+};
+export const uploadMultipleImages = async (files, folderName) => {
+  const urls = [];
+  return Promise.all(
+    files.map(async (file) => {
+      if (file == null || file === "" || file?.length == 0) {
+        urls.push("");
+      } else if (typeof file === "string") {
+        urls.push(file);
+      } else {
+        const storageRef = ref(
+          storage,
+          `${folderName}/${uuidv4() + file.name}`
+        );
+        const snapshot = await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+        urls.push(url);
+      }
+    })
+  ).then(() => {
+    return urls;
+  });
 };

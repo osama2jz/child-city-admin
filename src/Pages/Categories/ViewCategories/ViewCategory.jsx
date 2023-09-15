@@ -5,11 +5,11 @@ const ViewProduct = ({ rowData }) => {
   return (
     <Flex direction={"column"} w={"100%"}>
       <Image
-        src={rowData?.coverImage}
+        src={rowData?.image}
         width="200px"
         withPlaceholder
         height={"200px"}
-        fit="fill"
+        fit="cover"
         style={{
           border: `5px solid ${theme.primaryColor}`,
         }}

@@ -18,41 +18,29 @@ const ViewCategories = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([
-    {
-      serialNo: 1,
-      title: "Boys",
-      subTitle: "Clothing",
-      description: "This is a short description.",
-      blocked: false,
-    },
-    {
-      serialNo: 2,
-      title: "Girls",
-      subTitle: "Clothing",
-      description: "This is a short description.",
-      blocked: true,
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery("fetchServices", () => {
-    //   return axios.get(backendUrl + "/api/v1/service", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     const data = res.data.data;
-    //     data.map((item) => {
-    //       item.serialNo = data.indexOf(item) + 1;
-    //     });
-    //     setTableData(data);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchCategories",
+    () => {
+      return axios.get(backendUrl + "/category", {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
+      });
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        data.map((item) => {
+          item.serialNo = data.indexOf(item) + 1;
+        });
+        setTableData(data);
+      },
+    }
+  );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
       return item?.title?.toLowerCase().includes(search.toLowerCase());
@@ -71,7 +59,7 @@ const ViewCategories = () => {
       <PageHeader label={"View Categories"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col md="6" lg="3">
+          <Grid.Col sm="6" lg="4">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -79,7 +67,7 @@ const ViewCategories = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="6" lg="3">
+          <Grid.Col sm="6" lg="4">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -87,16 +75,18 @@ const ViewCategories = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"2"} style={{ textAlign: "end" }}>
+          <Grid.Col sm="6" md="3" lg={"2"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
+              fullWidth
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md={"6"} lg="4" style={{ textAlign: "end" }}>
+          <Grid.Col sm="6" md={"6"} lg="2">
             <Button
               label={"Add Category"}
+              fullWidth
               leftIcon="plus"
               onClick={() => navigate(routeNames.general.addCategory)}
             />

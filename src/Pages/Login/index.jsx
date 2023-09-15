@@ -41,34 +41,39 @@ export const Login = () => {
 
   const handleLogin = useMutation(
     (values) => {
-    //   return axios.post(`${backendUrl + "/api/v1/auth/login"}`, values);
-    // },
-    // {
-    //   onSuccess: (response) => {
-    //     if (response.data?.success) {
-    //       showNotification({
-    //         title: "Success",
-    //         message: response?.data?.message,
-    //         color: "green",
-    //       });
-    //       localStorage.setItem("userData", JSON.stringify(response?.data?.data));
-    //       setUser({ token: response?.data?.data?.token });
-    //       form.reset();
-    //     } else {
-    //       showNotification({
-    //         title: "Error",
-    //         message: response?.data?.message,
-    //         color: "red",
-    //       });
-    //     }
-    //   },
-    //   onError: (response) => {
-    //     showNotification({
-    //       title: "Error",
-    //       message: response?.response?.data?.message,
-    //       color: "red",
-    //     });
-    //   },
+      return axios.post(`${backendUrl + "/user/signin"}`, values);
+    },
+    {
+      onSuccess: (response) => {
+        if (response.status == 200) {
+          showNotification({
+            title: "Success",
+            message: response?.data?.message,
+            color: "green",
+          });
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(response?.data?.data)
+          );
+          setUser({ token: response?.data?.data?.token });
+          form.reset();
+          navigate(routeNames.general.landing);
+        } else {
+          showNotification({
+            title: "Error",
+            message: response?.data?.message,
+            color: "red",
+          });
+        }
+      },
+      onError: (response) => {
+        console.log(response.response.response);
+        showNotification({
+          title: "Error",
+          message: response?.error,
+          color: "red",
+        });
+      },
     }
   );
   return (

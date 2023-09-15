@@ -21,6 +21,7 @@ import { UserContext } from "../../contexts/UserContext";
 import TextArea from "../../components/TextArea";
 import MultipleDropzone from "../../components/MultipleDropzone";
 import DropZone from "../../components/Dropzone";
+import { uploadMultipleImages } from "../../constants/firebase";
 
 export const AboutUs = () => {
   const { user } = useContext(UserContext);
@@ -29,11 +30,10 @@ export const AboutUs = () => {
     validateInputOnChange: true,
     initialValues: {
       primaryEmail: "",
-      otherEmails: "",
-      primaryContact: "",
-      otherContacts: "",
-      primaryAddress: "",
-      otherAddresses: "",
+      otherEmail: "",
+      primaryPhone: "",
+      otherPhone: "",
+      address: "",
       linkedIn: "",
       facebook: "",
       twitter: "",
@@ -41,6 +41,8 @@ export const AboutUs = () => {
       youtube: "",
       whatsapp: "",
       topAlert: "",
+      saleAlertImage: null,
+      sliderImages: [],
     },
 
     validate: {
@@ -48,167 +50,172 @@ export const AboutUs = () => {
         /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,6}$/i.test(value)
           ? null
           : "Please enter a valid email",
-      primaryContact: (value) =>
+      primaryPhone: (value) =>
         value?.length > 0 ? null : "Please enter primary contact number",
-      primaryAddress: (value) =>
+      address: (value) =>
         value?.length > 0 ? null : "Please enter primary address",
+      sliderImages: (value) =>
+        value?.length > 0 ? null : "Please upload Slider Images",
     },
   });
 
   //Get Data
-  const { status } = useQuery("fetchAboutUs", () => {
-    //   return axios.get(backendUrl + "/api/v1/aboutUs", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     form.setValues(res.data.data[0]);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchAboutUs",
+    () => {
+      return axios.get(backendUrl + "/aboutUs", {});
+    },
+    {
+      onSuccess: (res) => {
+        form.setValues(res.data.data[0]);
+      },
+    }
+  );
 
   const handleSave = useMutation(
-    (values) => {
-      return axios.patch(`${backendUrl + "/api/v1/aboutUs"}`, values, {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
+    async (values) => {
+      const urls = await uploadMultipleImages(values.sliderImages, "Slider");
+      values.sliderImages = urls;
+      return axios.patch(`${backendUrl + "/aboutus"}`, values, {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
       });
     },
     {
       onSuccess: (response) => {
-        if (response.data?.success) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-        } else {
-          showNotification({
-            title: "Error",
-            message: response?.data?.message,
-            color: "red",
-          });
-        }
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
       },
     }
   );
   return (
     <Container fluid style={{ minHeight: "80vh" }}>
       <PageHeader label={"About Us"} />
-      <Tabs
-        defaultValue="info"
-        variant="pills"
-        color="primary.0"
-        styles={{
-          tab: {
-            backgroundColor: "rgb(0,0,0,0.1)",
-          },
-        }}
-      >
-        <Tabs.List position="center">
-          <Tabs.Tab value="info">Information</Tabs.Tab>
-          <Tabs.Tab value="imgs">Images</Tabs.Tab>
-        </Tabs.List>
+      <form onSubmit={form.onSubmit((values) => handleSave.mutate(values))}>
+        <Tabs
+          defaultValue="info"
+          variant="pills"
+          color="primary.0"
+          styles={{
+            tab: {
+              backgroundColor: "rgb(0,0,0,0.1)",
+            },
+          }}
+        >
+          <Tabs.List position="center">
+            <Tabs.Tab value="info">Information</Tabs.Tab>
+            <Tabs.Tab value="imgs">Images</Tabs.Tab>
+          </Tabs.List>
 
-        <Tabs.Panel value="info" pt="xs">
-          {status === "loading" ? (
-            <Loader style={{ display: "flex", margin: "auto" }} />
-          ) : (
-            <form
-              onSubmit={form.onSubmit((values) => handleSave.mutate(values))}
-            >
-              <SimpleGrid
-                breakpoints={[
-                  { minWidth: "sm", cols: 1 },
-                  { minWidth: "md", cols: 2 },
-                ]}
-              >
-                <InputField
-                  label={"Primary Email Address"}
-                  placeholder={"Enter Email Address"}
+          <Tabs.Panel value="info" pt="xs">
+            {status === "loading" ? (
+              <Loader style={{ display: "flex", margin: "auto" }} />
+            ) : (
+              <>
+                <SimpleGrid
+                  breakpoints={[
+                    { minWidth: "sm", cols: 1 },
+                    { minWidth: "md", cols: 2 },
+                  ]}
+                >
+                  <InputField
+                    label={"Primary Email Address"}
+                    placeholder={"Enter Email Address"}
+                    form={form}
+                    withAsterisk
+                    validateName={"primaryEmail"}
+                  />
+                  <InputField
+                    label={"Other Email Address"}
+                    placeholder={"Enter Other Email"}
+                    form={form}
+                    validateName={"otherEmail"}
+                  />
+                  <InputField
+                    label={"Primary Contact Number"}
+                    placeholder={"Enter Contact Number"}
+                    form={form}
+                    withAsterisk
+                    validateName={"primaryPhone"}
+                  />
+                  <InputField
+                    label={"Other Contact Number"}
+                    placeholder={"Enter Other Contact Number"}
+                    form={form}
+                    validateName={"otherPhone"}
+                  />
+                  <InputField
+                    label={"Instagram Profile"}
+                    placeholder={"Enter Instagram Profile Link"}
+                    form={form}
+                    validateName={"instagram"}
+                  />
+                  <InputField
+                    label={"Facebook Profile"}
+                    placeholder={"Enter Facebook Profile Link"}
+                    form={form}
+                    validateName={"facebook"}
+                  />
+                  <InputField
+                    label={"Youtube Profile"}
+                    placeholder={"Enter Youtube Profile Link"}
+                    form={form}
+                    validateName={"youtube"}
+                  />
+                  <InputField
+                    label={"Address"}
+                    placeholder={"Enter Address"}
+                    form={form}
+                    withAsterisk
+                    validateName={"address"}
+                  />
+                </SimpleGrid>
+                <TextArea
+                  rows="1"
+                  placeholder={"Enter Top Screen Floating Alert"}
+                  label={"Top Alert"}
                   form={form}
-                  withAsterisk
-                  validateName={"primaryEmail"}
+                  validateName={"topAlert"}
                 />
-                <InputField
-                  label={"Other Email Address"}
-                  placeholder={"Enter Other Contact Number"}
-                  form={form}
-                  validateName={"otherEmails"}
-                />
-                <InputField
-                  label={"Primary Contact Number"}
-                  placeholder={"Enter Contact Number"}
-                  form={form}
-                  withAsterisk
-                  validateName={"primaryContact"}
-                />
-                <InputField
-                  label={"Other Contact Number"}
-                  placeholder={"Enter Other Contact Number"}
-                  form={form}
-                  validateName={"otherContacts"}
-                />
-                <InputField
-                  label={"Instagram Profile"}
-                  placeholder={"Enter Instagram Profile Link"}
-                  form={form}
-                  validateName={"instagram"}
-                />
-                <InputField
-                  label={"Facebook Profile"}
-                  placeholder={"Enter Facebook Profile Link"}
-                  form={form}
-                  validateName={"facebook"}
-                />
-                <InputField
-                  label={"Youtube Profile"}
-                  placeholder={"Enter Youtube Profile Link"}
-                  form={form}
-                  validateName={"youtube"}
-                />
-                <InputField
-                  label={"Address"}
-                  placeholder={"Enter Primary Address"}
-                  form={form}
-                  withAsterisk
-                  validateName={"primaryAddress"}
-                />
-              </SimpleGrid>
-              <TextArea
-                rows="1"
-                placeholder={"Enter Top Screen Floating Alert"}
-                label={"Top Alert"}
+              </>
+            )}
+          </Tabs.Panel>
+
+          <Tabs.Panel value="imgs" pt="xs">
+            <Center>
+              <DropZone
+                label={"Sale Alert Image"}
                 form={form}
-                validateName={"topAlert"}
+                name={"saleAlertImage"}
+                folderName={"sale"}
               />
-            </form>
-          )}
-        </Tabs.Panel>
-
-        <Tabs.Panel value="imgs" pt="xs">
-          <Center>
-            <DropZone label={"Sale Alert Image"} form={form} />
-          </Center>
-          <MultipleDropzone
-            maxFiles={3}
-            text="Home Slider Images"
-            subText={"Drop beautiful Images here"}
-            form={form}
+            </Center>
+            <MultipleDropzone
+              maxFiles={3}
+              text="Home Slider Images"
+              subText={"Drop beautiful Images here"}
+              fieldName={"sliderImages"}
+              form={form}
+            />
+          </Tabs.Panel>
+        </Tabs>
+        <Group position="right" mt={"md"}>
+          <Button
+            label={"Cancel"}
+            variant={"outline"}
+            onClick={() => navigate(routeNames.general.landing)}
           />
-        </Tabs.Panel>
-      </Tabs>
-      <Group position="right" mt={"md"}>
-        <Button
-          label={"Cancel"}
-          variant={"outline"}
-          onClick={() => navigate(routeNames.general.landing)}
-        />
-        <Button label={"Save"} type={"submit"} loading={handleSave.isLoading} />
-      </Group>
+          <Button
+            label={"Save"}
+            type={"submit"}
+            loading={handleSave.isLoading}
+          />
+        </Group>
+      </form>
     </Container>
   );
 };

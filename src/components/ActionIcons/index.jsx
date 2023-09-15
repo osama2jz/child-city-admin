@@ -64,11 +64,11 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
   //to delete
   const handleDelete = useMutation(
     async () => {
-      const link = backendUrl + `/api/v1/${type}/${rowData._id}`;
+      const link = backendUrl + `/${type.toLowerCase()}/${rowData._id}`;
       return axios.delete(link, {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
       });
     },
     {
@@ -79,17 +79,14 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
           message: `${type} Deleted Successfully`,
           color: "green",
         });
-        if (type === "service") queryClient.invalidateQueries("fetchServices");
-        else if (type === "project")
-          queryClient.invalidateQueries("fetchProjects");
-        else if (type === "product")
+        if (type === "Category")
+          queryClient.invalidateQueries("fetchCategories");
+        else if (type === "Product")
           queryClient.invalidateQueries("fetchProducts");
-        else if (type === "jobs") queryClient.invalidateQueries("fetchJobs");
-        else if (type === "teamMember")
-          queryClient.invalidateQueries("fetchTeamMembers");
-        else if (type === "blog") queryClient.invalidateQueries("fetchBlogs");
-        else if (type === "testimonial")
-          queryClient.invalidateQueries("fetchTestimonials");
+        else if (type === "Sale") queryClient.invalidateQueries("fetchSales");
+        else if (type === "Expense")
+          queryClient.invalidateQueries("fetchExpenses");
+        else if (type === "User") queryClient.invalidateQueries("fetchUsers");
       },
       onError: (res) => {
         showNotification({

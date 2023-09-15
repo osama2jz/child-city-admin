@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Container, Grid, Group, SimpleGrid } from "@mantine/core";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import InputField from "../../../components/InputField";
@@ -15,12 +15,17 @@ import { routeNames } from "../../../Routes/routeNames";
 import SelectMenu from "../../../components/SelectMenu";
 import MultiSelect from "../../../components/MultiSelect";
 import MultipleDropzone from "../../../components/MultipleDropzone";
+import {
+  uploadMultipleImages,
+  uploadSingleFile,
+} from "../../../constants/firebase";
 
 export const AddProduct = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
   const [colorss, setColors] = useState(colors);
+  const [categories, setCategories] = useState([]);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -31,6 +36,7 @@ export const AddProduct = () => {
       colors: "",
       sizes: "",
       price: "",
+      sale: "",
       quantity: 0,
       sku: "",
       description: "",
@@ -44,12 +50,9 @@ export const AddProduct = () => {
           : "Please enter product title",
       category: (value) =>
         value?.length > 0 ? null : "Please select product category",
-      price: (value) =>
-        value?.length > 0 ? null : "Please enter product price",
+      price: (value) => (value > 0 ? null : "Please enter product price"),
       quantity: (value) =>
-        value?.length > 0 && value >= 0
-          ? null
-          : "Please select product quantity",
+        value >= 0 ? null : "Please select product quantity",
       sku: (value) => (value?.length > 0 ? null : "Please select product sku"),
       description: (value) =>
         value?.length > 0 ? null : "Please enter product description",
@@ -61,53 +64,60 @@ export const AddProduct = () => {
   useEffect(() => {
     if (state?.isUpdate) {
       form.setValues(state.data);
+      form.setFieldValue("category", state?.data?.category?._id);
     }
   }, [state]);
-  const handleAddService = useMutation((values) => {
-    //   if (state?.isUpdate)
-    //     return axios.patch(
-    //       `${backendUrl + `/api/v1/service/${state?.data?._id}`}`,
-    //       values,
-    //       {
-    //         headers: {
-    //           authorization: `Bearer ${user.token}`,
-    //         },
-    //       }
-    //     );
-    //   else
-    //     return axios.post(`${backendUrl + "/api/v1/service"}`, values, {
-    //       headers: {
-    //         authorization: `Bearer ${user.token}`,
-    //       },
-    //     });
-    // },
-    // {
-    //   onSuccess: (response) => {
-    //     if (response.data?.success) {
-    //       showNotification({
-    //         title: "Success",
-    //         message: response?.data?.message,
-    //         color: "green",
-    //       });
-    //       navigate(routeNames.general.viewService);
-    //       form.reset();
-    //     } else {
-    //       showNotification({
-    //         title: "Error",
-    //         message: response?.data?.message,
-    //         color: "red",
-    //       });
-    //     }
-    //   },
-  });
+  const handleAddProduct = useMutation(
+    async (values) => {
+      const urls = await uploadMultipleImages(values.images, "Products");
+      values.images = urls;
+      if (state?.isUpdate)
+        return axios.put(
+          `${backendUrl + `/product/${state?.data?._id}`}`,
+          values
+        );
+      else {
+        return axios.post(`${backendUrl + "/product"}`, values, {});
+      }
+    },
+    {
+      onSuccess: (response) => {
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.viewProducts);
+        form.reset();
+      },
+    }
+  );
+
+  const { status } = useQuery(
+    "fetchCategories",
+    () => {
+      return axios.get(backendUrl + "/category", {});
+    },
+    {
+      onSuccess: (res) => {
+        let cat = res.data.data
+          .filter((obj) => !obj?.blocked)
+          .map((obj) => {
+            if (!obj?.blocked) return { label: obj.title, value: obj?._id };
+          });
+
+        setCategories(cat);
+      },
+    }
+  );
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Product" : "Add Product"} />
       <form
-        onSubmit={form.onSubmit((values) => handleAddService.mutate(values))}
+        onSubmit={form.onSubmit((values) => handleAddProduct.mutate(values))}
       >
         <Grid>
-          <Grid.Col sm={6}>
+          <Grid.Col sm={12}>
             <InputField
               label={"Title"}
               placeholder={"Enter Product Title"}
@@ -118,7 +128,7 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <SelectMenu
-              data={["Boys", "Girls"]}
+              data={categories}
               label="Select Category"
               withAsterisk
               form={form}
@@ -166,8 +176,18 @@ export const AddProduct = () => {
               label={"Price"}
               placeholder={"Enter Product Price"}
               withAsterisk
+              type="number"
               form={form}
               validateName="price"
+            />
+          </Grid.Col>
+          <Grid.Col sm={6}>
+            <InputField
+              label={"Sale"}
+              placeholder={"Enter Sale in Percent"}
+              type="number"
+              form={form}
+              validateName="sale"
             />
           </Grid.Col>
           <Grid.Col sm={6}>
@@ -216,7 +236,7 @@ export const AddProduct = () => {
           <Button
             label={state?.isUpdate ? "Edit Product" : "Add Product"}
             type={"submit"}
-            loading={handleAddService.isLoading}
+            loading={handleAddProduct.isLoading}
           />
         </Group>
       </form>

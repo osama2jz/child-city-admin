@@ -38,11 +38,12 @@ const GeneralLayout = () => {
       return true;
     }
     localStorage.clear();
-    // setUser({ token: null });
+    setUser({ token: null });
     return true;
   };
 
-  return allowed && user?.token ? (
+  // return allowed && user?.token ? (
+  return true ? (
     <AppShell
       styles={{
         main: {
