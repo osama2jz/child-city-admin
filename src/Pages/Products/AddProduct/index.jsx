@@ -33,8 +33,8 @@ export const AddProduct = () => {
       title: "",
       category: "",
       season: "",
-      colors: "",
-      sizes: "",
+      colors: [],
+      sizes: [],
       price: "",
       sale: "",
       quantity: 0,
@@ -138,7 +138,7 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <SelectMenu
-              data={["Winters Collections", "Summers Collection"]}
+              data={["Winters Collection", "Summers Collection"]}
               label="Select Season"
               placeholder="Select Season"
               form={form}
@@ -164,7 +164,7 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <MultiSelect
-              data={["3-6M", "6-9M", "1-2Y", "2-3Y", "3-4y"]}
+              data={["3-6M", "6-9M", "1-2Y", "2-3Y", "3-4Y"]}
               label="Select Sizes"
               placeholder="Select Sizes"
               form={form}
