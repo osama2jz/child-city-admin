@@ -22,6 +22,14 @@ export const sidebarData = [
     ],
   },
   {
+    label: "Sub Categories",
+    icon: Category2,
+    links: [
+      { label: "Add Sub Category", link: routeNames.general.addSubCategory },
+      { label: "View Sub Categories", link: routeNames.general.viewSubCategories },
+    ],
+  },
+  {
     label: "Products",
     icon: BrandVite,
     links: [

@@ -1,38 +1,37 @@
-import axios from "axios";
-import { Container, Grid, Group, SimpleGrid } from "@mantine/core";
-import { useMutation, useQuery } from "react-query";
+import { Container, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import InputField from "../../../components/InputField";
-import TextArea from "../../../components/TextArea";
-import Button from "../../../components/Button";
-import PageHeader from "../../../components/PageHeader";
-import { backendUrl, colors } from "../../../constants/constants";
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../contexts/UserContext";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
-import SelectMenu from "../../../components/SelectMenu";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
 import MultiSelect from "../../../components/MultiSelect";
 import MultipleDropzone from "../../../components/MultipleDropzone";
-import {
-  uploadMultipleImages,
-  uploadSingleFile,
-} from "../../../constants/firebase";
+import PageHeader from "../../../components/PageHeader";
+import SelectMenu from "../../../components/SelectMenu";
+import TextArea from "../../../components/TextArea";
+import { backendUrl, colors } from "../../../constants/constants";
+import { uploadMultipleImages } from "../../../constants/firebase";
+import { UserContext } from "../../../contexts/UserContext";
 
 export const AddProduct = () => {
   const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   let { state } = useLocation();
   const [colorss, setColors] = useState(colors);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
 
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
       title: "",
-      category: "",
-      season: "",
+      category: null,
+      subCategory: "",
       colors: [],
       sizes: [],
       price: "",
@@ -65,8 +64,13 @@ export const AddProduct = () => {
     if (state?.isUpdate) {
       form.setValues(state.data);
       form.setFieldValue("category", state?.data?.category?._id);
+      form.setFieldValue("subCategory", state?.data?.subCategory?._id);
     }
   }, [state]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries("fetchSubCategories");
+  }, [form.values.category]);
   const handleAddProduct = useMutation(
     async (values) => {
       const urls = await uploadMultipleImages(values.images, "Products");
@@ -105,10 +109,28 @@ export const AddProduct = () => {
           .map((obj) => {
             if (!obj?.blocked) return { label: obj.title, value: obj?._id };
           });
-
         setCategories(cat);
       },
     }
+  );
+  const { _ } = useQuery(
+    "fetchSubCategories",
+    () => {
+      return axios.get(backendUrl + "/sub-category", {});
+    },
+    {
+      onSuccess: (res) => {
+        let cat = res.data.data
+          .filter((obj) => !obj?.blocked)
+          .map((obj) => {
+            if (!obj?.blocked && obj.category._id == form?.values?.category)
+              return { label: obj.title, value: obj?._id };
+          })
+          .filter((item) => item !== undefined);
+        setSubCategories(cat);
+      },
+    },
+    { enabled: !!form.values.category }
   );
   return (
     <Container fluid>
@@ -138,11 +160,13 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <SelectMenu
-              data={["Winters Collection", "Summers Collection"]}
-              label="Select Season"
-              placeholder="Select Season"
+              data={subCategories}
+              label="Select Sub Category"
               form={form}
-              validateName="season"
+              nothingFound="No Sub Category in select category"
+              disabled={!form.values.category}
+              validateName="subCategory"
+              placeholder="Select Sub Category"
             />
           </Grid.Col>
           <Grid.Col sm={6}>

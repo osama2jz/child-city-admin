@@ -35,7 +35,6 @@ const MultipleDropzone = ({
   const [titleImage, setTitleImage] = useState(
     form?.values?.[fieldName]?.[0] || null
   );
-console.log(form.values[fieldName])
   useEffect(() => {
     // Checking if the value is a string or an array
     if (typeof form?.values?.[fieldName] === "string") {

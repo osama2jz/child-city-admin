@@ -1,7 +1,7 @@
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
-import ViewService from "./ViewProduct";
+import ViewCategory from "./ViewSubCategory";
 
 export const Columns = [
   {
@@ -11,53 +11,26 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "",
-    selector: (row) => row.image,
-    center: true,
-    width: "40px",
-    cell: (row) => <TableImageView src={row?.images?.[0]} />,
-  },
-  {
     name: "Title",
     selector: (row) => row.title,
-    sortable: true,
-    // center: true,
-    width: "250px",
-  },
-  {
-    name: "Category",
-    selector: (row) => row.category?.title,
-    sortable: true,
-    center: true,
-    width: "180px",
-  },
-  {
-    name: "Sub Category",
-    selector: (row) => row.subCategory?.title,
     sortable: true,
     // center: true,
     width: "200px",
   },
   {
-    name: "SKU",
-    selector: (row) => row.sku,
+    name: "Category",
+    selector: (row) => row.category?.title,
     sortable: true,
-    center: true,
-    width: "180px",
+    // center: true,
+    width: "200px",
   },
+
   {
-    name: "Quantity",
-    selector: (row) => row.quantity,
+    name: "Short Description",
+    selector: (row) => row.description,
     sortable: true,
-    center: true,
-    width: "150px",
-  },
-  {
-    name: "Price",
-    selector: (row) => row.price,
-    sortable: true,
-    center: true,
-    width: "180px",
+    // center: true,
+    width: "300px",
   },
   {
     name: "Status",
@@ -69,8 +42,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"Product"}
-        queryName="fetchProducts"
+        type={"Sub-Category"}
+        queryName="fetchSubCategories"
       />
     ),
   },
@@ -82,10 +55,10 @@ export const Columns = [
       <ActionIcons
         rowData={row}
         view={true}
-        del={true}
+        // del={true}
         edit={true}
-        viewData={<ViewService rowData={row} />}
-        type="Product"
+        viewData={<ViewCategory rowData={row} />}
+        type="Sub-Category"
       />
     ),
   },

@@ -17,6 +17,8 @@ import ViewExpenses from "./Pages/Accounts/ViewExpenses";
 import { AddSale } from "./Pages/Sales/AddSale";
 import ViewSales from "./Pages/Sales/ViewSales";
 import Users from "./Pages/Users";
+import { AddSubCategory } from "./Pages/SubCategories/AddSubCategory";
+import  ViewSubCategories  from "./Pages/SubCategories/ViewSubCategories";
 
 function App() {
   return (
@@ -27,6 +29,14 @@ function App() {
         <Route
           path={routeNames.general.addCategory}
           element={<AddCategory />}
+        />
+        <Route
+          path={routeNames.general.addSubCategory}
+          element={<AddSubCategory />}
+        />
+        <Route
+          path={routeNames.general.viewSubCategories}
+          element={<ViewSubCategories />}
         />
         <Route
           path={routeNames.general.viewCategory}

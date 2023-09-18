@@ -34,6 +34,14 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
           },
         });
         break;
+      case "Sub-Category":
+        navigate(routeNames.general.addSubCategory, {
+          state: {
+            isUpdate: true,
+            data: rowData,
+          },
+        });
+        break;
       case "Product":
         navigate(routeNames.general.addProduct, {
           state: {
