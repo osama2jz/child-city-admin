@@ -1,4 +1,4 @@
-export const backendUrl = "http://localhost:6969";
+export const backendUrl = "https://child-city-backend-a7000291e61e.herokuapp.com/";
 export const colors = [
   "Red",
   "Orange",
