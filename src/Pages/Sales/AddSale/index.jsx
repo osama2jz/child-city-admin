@@ -1,7 +1,7 @@
 import { Container, Group, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useContext, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
 import Button from "../../../components/Button";
@@ -19,6 +19,8 @@ export const AddSale = () => {
   const navigate = useNavigate();
   let { state } = useLocation();
   const [categories, setCategories] = useState([]);
+  const queryClient = useQueryClient();
+  const [subCategories, setSubCategories] = useState([]);
 
   const form = useForm({
     validateInputOnChange: true,
@@ -27,6 +29,7 @@ export const AddSale = () => {
       sale: "",
       description: "",
       category: "",
+      subCategory: [],
     },
 
     validate: {
@@ -45,9 +48,31 @@ export const AddSale = () => {
   useEffect(() => {
     if (state?.isUpdate) {
       form.setValues(state.data);
-      form.setFieldValue("category", state.data.category.map((obj) => obj._id.toString()))
+      form.setFieldValue(
+        "category",
+        state.data.category.map((obj) => obj._id.toString())
+      );
     }
   }, [state]);
+  const { _ } = useQuery(
+    "fetchSubCategories",
+    () => {
+      return axios.get(backendUrl + "/sub-category", {});
+    },
+    {
+      onSuccess: (res) => {
+        let cat = res.data.data
+          .filter((obj) => !obj?.blocked)
+          .map((obj) => {
+            if (!obj?.blocked && obj.category._id == form?.values?.category)
+              return { label: obj.title, value: obj?._id };
+          })
+          .filter((item) => item !== undefined);
+        setSubCategories(cat);
+      },
+    },
+    { enabled: !!form.values.category }
+  );
   const handleAddSale = useMutation(
     (values) => {
       if (state?.isUpdate)
@@ -96,6 +121,9 @@ export const AddSale = () => {
       },
     }
   );
+  useEffect(() => {
+    queryClient.invalidateQueries("fetchSubCategories");
+  }, [form.values.category]);
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Sale" : "Add Sale"} />
@@ -114,6 +142,14 @@ export const AddSale = () => {
           data={categories}
           form={form}
           validateName="category"
+        />
+        <MultiSelect
+          label="Select Sub Category"
+          placeholder="Select Sub Categories"
+          nothingFound="No Sub Category in select category"
+          data={subCategories}
+          form={form}
+          validateName="subCategory"
         />
         <InputField
           label={"Sale Percent"}

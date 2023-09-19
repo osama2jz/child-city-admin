@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Container, Group } from "@mantine/core";
+import { Container, Group, Switch } from "@mantine/core";
 import { useMutation, useQuery } from "react-query";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -27,6 +27,7 @@ export const AddSubCategory = () => {
       title: "",
       category: "",
       description: "",
+      showFilters: false,
     },
 
     validate: {
@@ -140,7 +141,12 @@ export const AddSubCategory = () => {
           withAsterisk
           validateName={"description"}
         />
-
+        <Switch
+          label="Show Age Filters"
+          labelPosition="left"
+          checked={form.values.showFilters}
+          {...form.getInputProps("showFilters")}
+        />
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}

@@ -1,4 +1,4 @@
-import { Anchor, Badge } from "@mantine/core";
+import { Anchor, Badge, Text } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
@@ -12,58 +12,30 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "",
-    selector: (row) => row.coverImage,
-    center: true,
-    width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
-  },
-  {
     name: "Customer Name",
-    selector: (row) => row.name,
+    selector: (row) => row?.customerName,
     sortable: true,
     // center: true,
-    width: "250px",
-  },
-  {
-    name: "Product Name",
-    selector: (row) => row.productName,
-    sortable: true,
-    // center: true,
-    width: "200px",
-  },
-  {
-    name: "Quantity",
-    selector: (row) => row.quantity,
-    sortable: true,
-    center: true,
-    width: "150px",
+    grow: 1,
+    cell: (row) => <Text>{row?.customerName || "Guest User"}</Text>,
   },
   {
     name: "Amount",
-    selector: (row) => row.amount,
+    selector: (row) => row.totalPrice,
     sortable: true,
     center: true,
     width: "150px",
   },
   {
     name: "Payment",
-    selector: (row) => row.payment,
+    selector: (row) => row.paymentReceipt,
     sortable: true,
     // center: true,
     width: "120px",
     cell: (row) => (
-      <Anchor color="primary.0">{row?.receipt || "Receipt"}</Anchor>
-    ),
-  },
-  {
-    name: "Status",
-    selector: (row) => row.paymentStatus,
-    width: "150px",
-    sortable: true,
-    center: true,
-    cell: (row) => (
-      <Badge variant="gradient">{row.paymentStatus ? "Paid" : "Pending"}</Badge>
+      <Anchor color="primary.0" href={row?.paymentReceipt}>
+        {"Receipt"}
+      </Anchor>
     ),
   },
   {

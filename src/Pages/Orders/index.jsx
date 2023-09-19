@@ -18,43 +18,36 @@ const ViewOrders = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([
-    {
-      serialNo: 1,
-      name: "Some Person",
-      productName: "Denim Jeans",
-      amount: "500",
-      quantity: "2",
-      payment: 3500,
-      address:'f-10 markaz, Islambad, Pakistan',
-      delivered: false,
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 
-  const { status } = useQuery("fetchServices", () => {
-    //   return axios.get(backendUrl + "/api/v1/service", {
-    //     headers: {
-    //       authorization: `Bearer ${user.token}`,
-    //     },
-    //   });
-    // },
-    // {
-    //   onSuccess: (res) => {
-    //     const data = res.data.data;
-    //     data.map((item) => {
-    //       item.serialNo = data.indexOf(item) + 1;
-    //     });
-    //     setTableData(data);
-    //   },
-  });
+  const { status } = useQuery(
+    "fetchOrders",
+    () => {
+      return axios.get(backendUrl + "/order", {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
+      });
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        data.map((item) => {
+          item.serialNo = data.indexOf(item) + 1;
+          item.customerName ?? "Guest User";
+        });
+        setTableData(data);
+      },
+    }
+  );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
-      return item?.name?.toLowerCase().includes(search.toLowerCase());
+      return item
     else
       return (
-        item?.name?.toLowerCase().includes(search.toLowerCase()) &&
+        item?.customerName?.toLowerCase().includes(search.toLowerCase()) &&
         item?.delivered === blockedFilter
       );
   });

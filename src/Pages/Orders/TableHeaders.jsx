@@ -1,4 +1,4 @@
-import { Anchor } from "@mantine/core";
+import { Anchor, Text } from "@mantine/core";
 import ActionIcons from "../../components/ActionIcons";
 import StatusToggle from "../../components/StatusToggle";
 import TableImageView from "../../components/TableImageView";
@@ -12,48 +12,47 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "",
-    selector: (row) => row.coverImage,
-    center: true,
-    width: "40px",
-    cell: (row) => <TableImageView src={row?.coverImage} />,
-  },
-  {
     name: "Customer Name",
-    selector: (row) => row.name,
+    selector: (row) => row?.userId,
     sortable: true,
     // center: true,
     width: "250px",
+    cell: (row) => <Text>{row?.userId?.name || "Guest User"}</Text>,
   },
   {
-    name: "Product Name",
-    selector: (row) => row.productName,
+    name: "City",
+    selector: (row) => row.address.city,
     sortable: true,
     // center: true,
     width: "200px",
   },
   {
-    name: "Quantity",
-    selector: (row) => row.quantity,
+    name: "Total Items",
+    selector: (row) => row.product,
     sortable: true,
     center: true,
     width: "150px",
+    cell: (row) => (
+      <Text>{row.product.reduce((a, curr) => a + curr.quantity, 0)}</Text>
+    ),
   },
   {
     name: "Amount",
-    selector: (row) => row.amount,
+    selector: (row) => row.totalPrice,
     sortable: true,
     center: true,
     width: "150px",
   },
   {
     name: "Payment",
-    selector: (row) => row.payment,
+    selector: (row) => row.paymentReceipt,
     sortable: true,
     // center: true,
     width: "150px",
     cell: (row) => (
-      <Anchor color="primary.0">{row?.receipt || "Receipt"}</Anchor>
+      <Anchor color="primary.0" href={row?.paymentReceipt}>
+        {"Receipt"}
+      </Anchor>
     ),
   },
   {
@@ -90,6 +89,7 @@ export const Columns = [
 
 export const filterbyStatus = [
   { label: "All", value: null },
-  { label: "Delivered", value: true },
-  { label: "Pending", value: false },
+  "Pending",
+  "Dispatched",
+  "Delivered",
 ];

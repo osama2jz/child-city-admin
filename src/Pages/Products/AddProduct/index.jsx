@@ -31,7 +31,7 @@ export const AddProduct = () => {
     initialValues: {
       title: "",
       category: null,
-      subCategory: "",
+      subCategory: null,
       colors: [],
       sizes: [],
       price: "",

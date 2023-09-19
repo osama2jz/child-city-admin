@@ -26,7 +26,10 @@ export const sidebarData = [
     icon: Category2,
     links: [
       { label: "Add Sub Category", link: routeNames.general.addSubCategory },
-      { label: "View Sub Categories", link: routeNames.general.viewSubCategories },
+      {
+        label: "View Sub Categories",
+        link: routeNames.general.viewSubCategories,
+      },
     ],
   },
   {
@@ -50,13 +53,21 @@ export const sidebarData = [
       { label: "View Sales", link: routeNames.general.viewSales },
     ],
   },
-
+  {
+    label: "Coupens",
+    icon: BrandVite,
+    links: [
+      { label: "Add Coupen", link: routeNames.general.addCoupen },
+      { label: "View Coupens", link: routeNames.general.viewCoupens },
+    ],
+  },
   {
     label: "Accounts",
     icon: BrandVite,
     links: [
       { label: "Add Expenses", link: routeNames.general.addExpenses },
       { label: "View Expenses", link: routeNames.general.viewExpesnes },
+      { label: "Add Revenue", link: routeNames.general.addRevenue },
       { label: "View Revenue", link: routeNames.general.revenue },
     ],
   },

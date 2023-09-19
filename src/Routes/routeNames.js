@@ -13,9 +13,12 @@ export const routeNames = {
     addSale: "/add-sale",
     viewSales: "/view-sales",
     revenue: "/view-revenue",
+    addRevenue: "/add-revenue",
     orders: "/orders",
     settings: "/settings",
     aboutUs: "/about-us",
     users: "/users",
+    addCoupen: "/add-coupen",
+    viewCoupens: "/view-coupens",
   },
 };

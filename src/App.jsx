@@ -18,7 +18,10 @@ import { AddSale } from "./Pages/Sales/AddSale";
 import ViewSales from "./Pages/Sales/ViewSales";
 import Users from "./Pages/Users";
 import { AddSubCategory } from "./Pages/SubCategories/AddSubCategory";
-import  ViewSubCategories  from "./Pages/SubCategories/ViewSubCategories";
+import ViewSubCategories from "./Pages/SubCategories/ViewSubCategories";
+import { AddCoupen } from "./Pages/Coupens/AddCoupen";
+import ViewCoupens from "./Pages/Coupens/ViewCoupens";
+import AddRevenue from "./Pages/Accounts/AddRevenue";
 
 function App() {
   return (
@@ -49,6 +52,7 @@ function App() {
         />
         <Route path={routeNames.general.orders} element={<Orders />} />
         <Route path={routeNames.general.settings} element={<Settings />} />
+        <Route path={routeNames.general.addRevenue} element={<AddRevenue />} />
         <Route path={routeNames.general.revenue} element={<ViewRevenue />} />
         <Route path={routeNames.general.aboutUs} element={<AboutUs />} />
         <Route
@@ -57,7 +61,12 @@ function App() {
         />
         <Route path={routeNames.general.users} element={<Users />} />
         <Route path={routeNames.general.addSale} element={<AddSale />} />
+        <Route path={routeNames.general.addCoupen} element={<AddCoupen />} />
         <Route path={routeNames.general.viewSales} element={<ViewSales />} />
+        <Route
+          path={routeNames.general.viewCoupens}
+          element={<ViewCoupens />}
+        />
         <Route
           path={routeNames.general.addExpenses}
           element={<AddExpenses />}

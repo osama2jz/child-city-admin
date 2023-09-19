@@ -1,20 +1,19 @@
-import axios from "axios";
 import { Container, Group } from "@mantine/core";
-import { useMutation } from "react-query";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import InputField from "../../../components/InputField";
-import TextArea from "../../../components/TextArea";
-import Button from "../../../components/Button";
-import PageHeader from "../../../components/PageHeader";
-import { backendUrl } from "../../../constants/constants";
+import axios from "axios";
 import { useContext, useEffect } from "react";
-import { UserContext } from "../../../contexts/UserContext";
-import DropZone from "../../../components/Dropzone";
+import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
+import PageHeader from "../../../components/PageHeader";
+import TextArea from "../../../components/TextArea";
+import { backendUrl } from "../../../constants/constants";
+import { UserContext } from "../../../contexts/UserContext";
 
-export const AddCategory = () => {
+export const AddCoupen = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -22,27 +21,22 @@ export const AddCategory = () => {
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
-      title: "",
-      subTitle: "",
+      name: "",
+      code: "",
+      off: 0,
       description: "",
-      image: null,
-      order: null,
     },
 
     validate: {
-      title: (value) =>
+      name: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
-          : "Please enter category title",
-      subTitle: (value) =>
-        value?.length > 1 && value?.length < 30
-          ? null
-          : "Please enter category sub title",
-      order: (value) =>
-        value > 0 ? null : "Please enter category display order",
+          : "Please enter Coupen title",
+      code: (value) =>
+        value?.length == 8 ? null : "Please enter valid coupen code",
+      off: (value) => (value > 0 ? null : "Please enter off amount in percent"),
       description: (value) =>
-        value?.length > 0 ? null : "Please enter category description",
-      image: (value) => (value ? null : "Please upload a cover Image"),
+        value?.length > 0 ? null : "Please enter coupen description",
     },
   });
 
@@ -51,11 +45,11 @@ export const AddCategory = () => {
       form.setValues(state.data);
     }
   }, [state]);
-  const handleAddCategory = useMutation(
+  const handleAddCoupen = useMutation(
     (values) => {
       if (state?.isUpdate)
         return axios.put(
-          `${backendUrl + `/category/${state?.data?._id}`}`,
+          `${backendUrl + `/coupen/${state?.data?._id}`}`,
           values
           // {
           //   headers: {
@@ -64,7 +58,7 @@ export const AddCategory = () => {
           // }
         );
       else
-        return axios.post(`${backendUrl + "/category"}`, values, {
+        return axios.post(`${backendUrl + "/coupen"}`, values, {
           // headers: {
           //   authorization: `Bearer ${user.token}`,
           // },
@@ -78,7 +72,7 @@ export const AddCategory = () => {
             message: response?.data?.message,
             color: "green",
           });
-          navigate(routeNames.general.viewCategory);
+          navigate(routeNames.general.viewCoupens);
           form.reset();
         } else {
           showNotification({
@@ -92,31 +86,31 @@ export const AddCategory = () => {
   );
   return (
     <Container fluid>
-      <PageHeader label={state?.isUpdate ? "Edit Category" : "Add Category"} />
+      <PageHeader label={state?.isUpdate ? "Edit Coupen" : "Add Coupen"} />
       <form
-        onSubmit={form.onSubmit((values) => handleAddCategory.mutate(values))}
+        onSubmit={form.onSubmit((values) => handleAddCoupen.mutate(values))}
       >
         <InputField
-          label={"Title"}
-          placeholder={"Enter Category Title"}
+          label={"Coupen Name"}
+          placeholder={"Enter Coupen name"}
           form={form}
           withAsterisk
-          validateName={"title"}
+          validateName={"name"}
         />
         <InputField
-          label={"Sub Title"}
-          placeholder={"Enter Category Sub Title"}
+          label={"Coupen Code"}
+          placeholder={"Enter Coupen Code"}
           form={form}
           withAsterisk
-          validateName={"subTitle"}
+          validateName={"code"}
         />
         <InputField
-          label={"Display Order"}
-          placeholder={"Enter Category display order"}
+          label={"Off Amount (%)"}
+          placeholder={"Enter Off Amount in percent"}
           form={form}
+          withAsterisk
           type="number"
-          withAsterisk
-          validateName={"order"}
+          validateName={"off"}
         />
         <TextArea
           label={"Short Description"}
@@ -126,14 +120,6 @@ export const AddCategory = () => {
           withAsterisk
           validateName={"description"}
         />
-        <Group position="center">
-          <DropZone
-            form={form}
-            folderName={"category"}
-            name={"image"}
-            label="Cover Image"
-          />
-        </Group>
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}
@@ -141,9 +127,9 @@ export const AddCategory = () => {
             onClick={() => navigate(routeNames.general.viewCategory)}
           />
           <Button
-            label={state?.isUpdate ? "Edit Category" : "Add Category"}
+            label={state?.isUpdate ? "Edit Coupen" : "Add Coupen"}
             type={"submit"}
-            loading={handleAddCategory.isLoading}
+            loading={handleAddCoupen.isLoading}
           />
         </Group>
       </form>

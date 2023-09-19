@@ -18,21 +18,7 @@ const ViewProducts = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [tableData, setTableData] = useState([
-    {
-      serialNo: 1,
-      title: "Boys Denim Jeans",
-      category: "Boys",
-      sku: "CE12312",
-      price: 1999,
-      blocked: false,
-      quantity: 40,
-      colors: ["Red", "Pink", "Yellow"],
-      sizes: ["1-2Y", "2-3Y"],
-      season: "Winters Collections",
-      description: "This is a description.",
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [blockedFilter, setBlockedFilter] = useState(null);
 

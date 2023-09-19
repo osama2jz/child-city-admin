@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Container, Group } from "@mantine/core";
+import { Container, Group, SimpleGrid } from "@mantine/core";
 import { useMutation } from "react-query";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -13,8 +13,9 @@ import { UserContext } from "../../../contexts/UserContext";
 import DropZone from "../../../components/Dropzone";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
+import SelectMenu from "../../../components/SelectMenu";
 
-export const AddCategory = () => {
+const AddRevenue = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -23,26 +24,19 @@ export const AddCategory = () => {
     validateInputOnChange: true,
     initialValues: {
       title: "",
-      subTitle: "",
       description: "",
-      image: null,
-      order: null,
+      totalPrice: null,
+      customerName: "Admin",
     },
 
     validate: {
       title: (value) =>
         value?.length > 1 && value?.length < 30
           ? null
-          : "Please enter category title",
-      subTitle: (value) =>
-        value?.length > 1 && value?.length < 30
-          ? null
-          : "Please enter category sub title",
-      order: (value) =>
-        value > 0 ? null : "Please enter category display order",
+          : "Please enter revenue title",
+      totalPrice: (value) => (value > 0 ? null : "Please enter amount"),
       description: (value) =>
-        value?.length > 0 ? null : "Please enter category description",
-      image: (value) => (value ? null : "Please upload a cover Image"),
+        value?.length > 0 ? null : "Please enter expenses description",
     },
   });
 
@@ -51,11 +45,11 @@ export const AddCategory = () => {
       form.setValues(state.data);
     }
   }, [state]);
-  const handleAddCategory = useMutation(
+  const handleAddRevenue = useMutation(
     (values) => {
       if (state?.isUpdate)
         return axios.put(
-          `${backendUrl + `/category/${state?.data?._id}`}`,
+          `${backendUrl + `/revenue/${state?.data?._id}`}`,
           values
           // {
           //   headers: {
@@ -64,7 +58,7 @@ export const AddCategory = () => {
           // }
         );
       else
-        return axios.post(`${backendUrl + "/category"}`, values, {
+        return axios.post(`${backendUrl + "/revenue"}`, values, {
           // headers: {
           //   authorization: `Bearer ${user.token}`,
           // },
@@ -72,51 +66,36 @@ export const AddCategory = () => {
     },
     {
       onSuccess: (response) => {
-        if (response?.status == 200) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-          navigate(routeNames.general.viewCategory);
-          form.reset();
-        } else {
-          showNotification({
-            title: "Error",
-            message: response?.data?.message,
-            color: "red",
-          });
-        }
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.revenue);
+        form.reset();
       },
     }
   );
   return (
     <Container fluid>
-      <PageHeader label={state?.isUpdate ? "Edit Category" : "Add Category"} />
+      <PageHeader label={state?.isUpdate ? "Edit Revenue" : "Add Revenue"} />
       <form
-        onSubmit={form.onSubmit((values) => handleAddCategory.mutate(values))}
+        onSubmit={form.onSubmit((values) => handleAddRevenue.mutate(values))}
       >
         <InputField
           label={"Title"}
-          placeholder={"Enter Category Title"}
+          placeholder={"Enter Title"}
           form={form}
           withAsterisk
           validateName={"title"}
         />
         <InputField
-          label={"Sub Title"}
-          placeholder={"Enter Category Sub Title"}
-          form={form}
-          withAsterisk
-          validateName={"subTitle"}
-        />
-        <InputField
-          label={"Display Order"}
-          placeholder={"Enter Category display order"}
+          label={"Amount"}
+          placeholder={"Enter Amount"}
           form={form}
           type="number"
           withAsterisk
-          validateName={"order"}
+          validateName={"totalPrice"}
         />
         <TextArea
           label={"Short Description"}
@@ -126,27 +105,20 @@ export const AddCategory = () => {
           withAsterisk
           validateName={"description"}
         />
-        <Group position="center">
-          <DropZone
-            form={form}
-            folderName={"category"}
-            name={"image"}
-            label="Cover Image"
-          />
-        </Group>
         <Group position="right" mt={"md"}>
           <Button
             label={"Cancel"}
             variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewCategory)}
+            onClick={() => navigate(routeNames.general.revenue)}
           />
           <Button
-            label={state?.isUpdate ? "Edit Category" : "Add Category"}
+            label={state?.isUpdate ? "Edit Revenue" : "Add Revenue"}
             type={"submit"}
-            loading={handleAddCategory.isLoading}
+            loading={handleAddRevenue.isLoading}
           />
         </Group>
       </form>
     </Container>
   );
 };
+export default AddRevenue;

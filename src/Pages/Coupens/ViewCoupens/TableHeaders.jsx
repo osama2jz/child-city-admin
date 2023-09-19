@@ -1,8 +1,7 @@
-import { Text } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
-import ViewCategory from "./ViewSubCategory";
+import ViewCategory from "./ViewCoupen";
 
 export const Columns = [
   {
@@ -12,26 +11,25 @@ export const Columns = [
     sortable: true,
   },
   {
-    name: "Title",
-    selector: (row) => row.title,
+    name: "Coupen Name",
+    selector: (row) => row.name,
     sortable: true,
     // center: true,
     width: "200px",
   },
   {
-    name: "Category",
-    selector: (row) => row.category?.title,
+    name: "Coupen Code",
+    selector: (row) => row.code,
     sortable: true,
     // center: true,
     width: "200px",
   },
   {
-    name: "Age Filter",
-    selector: (row) => row.showFilters,
+    name: "Off Amount (%)",
+    selector: (row) => row.off,
     sortable: true,
     // center: true,
     width: "200px",
-    cell: (row) => <Text>{row?.showFilters ? "Yes" : "No"}</Text>,
   },
   {
     name: "Short Description",
@@ -50,8 +48,8 @@ export const Columns = [
       <StatusToggle
         status={row.blocked}
         id={row._id}
-        type={"Sub-Category"}
-        queryName="fetchSubCategories"
+        type={"Coupen"}
+        queryName="fetchCoupens"
       />
     ),
   },
@@ -63,10 +61,10 @@ export const Columns = [
       <ActionIcons
         rowData={row}
         view={true}
-        // del={true}
+        del={true}
         edit={true}
         viewData={<ViewCategory rowData={row} />}
-        type="Sub-Category"
+        type="Coupen"
       />
     ),
   },
