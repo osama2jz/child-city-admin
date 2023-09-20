@@ -72,21 +72,20 @@ export const AddCategory = () => {
     },
     {
       onSuccess: (response) => {
-        if (response?.status == 200) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-          navigate(routeNames.general.viewCategory);
-          form.reset();
-        } else {
-          showNotification({
-            title: "Error",
-            message: response?.data?.message,
-            color: "red",
-          });
-        }
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.viewCategory);
+        form.reset();
+      },
+      onError: (err, res) => {
+        showNotification({
+          title: "Error",
+          message: err?.response?.data?.error,
+          color: "red",
+        });
       },
     }
   );

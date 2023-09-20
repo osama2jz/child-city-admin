@@ -39,7 +39,7 @@ export const Settings = () => {
   const handleChangePassword = useMutation(
     (values) => {
       return axios.put(
-        `${backendUrl + `/user/changePassword/${user?.id}`}`,
+        `${backendUrl + `/user/changePassword/${user?.userId}`}`,
         values,
         {
           // headers: {

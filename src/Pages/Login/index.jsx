@@ -45,32 +45,23 @@ export const Login = () => {
     },
     {
       onSuccess: (response) => {
-        if (response.status == 200) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-          localStorage.setItem(
-            "userData",
-            JSON.stringify(response?.data?.data)
-          );
-          setUser({ token: response?.data?.data?.token });
-          form.reset();
-          navigate(routeNames.general.landing);
+        if (response.data.user.isAdmin) {
+          console.log("here");
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          setUser(response.data.user);
+          navigate("/");
         } else {
           showNotification({
             title: "Error",
-            message: response?.data?.message,
+            message: "Wrong Credentials",
             color: "red",
           });
         }
       },
       onError: (response) => {
-        console.log(response.response.response);
         showNotification({
           title: "Error",
-          message: response?.error,
+          message: response.response?.data?.error,
           color: "red",
         });
       },

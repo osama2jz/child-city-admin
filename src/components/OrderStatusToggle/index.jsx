@@ -6,35 +6,34 @@ import { backendUrl } from "../../constants/constants";
 import { UserContext } from "../../contexts/UserContext";
 import { showNotification } from "@mantine/notifications";
 
-const StatusToggle = ({ status, id, type, queryName }) => {
+const OrderStatusToggle = ({ status, id }) => {
   const { user } = useContext(UserContext);
-  const [blocked, setBlocked] = useState(status ? true : false);
+  const [statuss, setStatuss] = useState(status);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    setBlocked(status);
+    setStatuss(status);
   }, [status]);
   //to change status
   const handleStatusChange = useMutation(
-    async () => {
-      const link = backendUrl + `/${type.toLowerCase()}/changeStatus/${id}`;
+    async (values) => {
+      const link = backendUrl + `/order/changeStatus/${id}`;
       return axios.post(
         link,
-        { blocked: !blocked },
-        {
-          // headers: {
-          //   authorization: `Bearer ${user.token}`,
-          // },
-        }
+        values
+        //     {
+        //       // headers: {
+        //       //   authorization: `Bearer ${user.token}`,
+        //       // },
+        //     }
       );
     },
     {
       onSuccess: (res) => {
-        queryName && queryClient.invalidateQueries(queryName);
-        setBlocked(blocked ? "unBlocked" : "Block");
+        queryClient.invalidateQueries("fetchOrders");
         showNotification({
           title: "Success",
-          message: `${type} status changed successfully`,
+          message: `Order status changed successfully`,
           color: "green",
         });
       },
@@ -62,23 +61,46 @@ const StatusToggle = ({ status, id, type, queryName }) => {
       }}
     >
       <Menu.Target>
-        <Badge color={blocked ? "red" : "green"} w="100px">
-          {blocked ? "Blocked" : "Unblocked"}
+        <Badge
+          variant="gradient"
+          w="100px"
+          bg={
+            statuss === "Cancelled"
+              ? "gray"
+              : statuss === "Delivered"
+              ? "primary.0"
+              : statuss === "Dispatched"
+              ? "cyan"
+              : ""
+          }
+        >
+          {statuss}
         </Badge>
       </Menu.Target>
       <Menu.Dropdown>
-        {!blocked ? (
-          <Menu.Item color="red" onClick={() => handleStatusChange.mutate()}>
-            Block
-          </Menu.Item>
-        ) : (
-          <Menu.Item color="green" onClick={() => handleStatusChange.mutate()}>
-            Unblock
-          </Menu.Item>
-        )}
+        <Menu.Item
+          onClick={() => handleStatusChange.mutate({ status: "Pending" })}
+        >
+          Pending
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => handleStatusChange.mutate({ status: "Dispatched" })}
+        >
+          Dispatched
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => handleStatusChange.mutate({ status: "Delivered" })}
+        >
+          Delivered
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => handleStatusChange.mutate({ status: "Cancelled" })}
+        >
+          Cancelled
+        </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
 };
 
-export default StatusToggle;
+export default OrderStatusToggle;

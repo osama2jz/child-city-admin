@@ -1,8 +1,7 @@
 import { Anchor, Text } from "@mantine/core";
 import ActionIcons from "../../components/ActionIcons";
-import StatusToggle from "../../components/StatusToggle";
-import TableImageView from "../../components/TableImageView";
 import ViewService from "./ViewOrder";
+import OrderStatusToggle from "../../components/OrderStatusToggle";
 
 export const Columns = [
   {
@@ -57,18 +56,11 @@ export const Columns = [
   },
   {
     name: "Status",
-    selector: (row) => row.blocked,
+    selector: (row) => row.status,
     width: "150px",
     sortable: true,
     center: true,
-    cell: (row) => (
-      <StatusToggle
-        status={row.delivered}
-        id={row._id}
-        type={"order"}
-        queryName="fetchServices"
-      />
-    ),
+    cell: (row) => <OrderStatusToggle status={row?.status} id={row?._id} />,
   },
   {
     name: "Actions",

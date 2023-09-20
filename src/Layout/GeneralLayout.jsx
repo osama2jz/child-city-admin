@@ -21,29 +21,29 @@ const GeneralLayout = () => {
   const { user, setUser } = useContext(UserContext);
   const [opened, setOpened] = useState(false);
 
-  const [allowed, setAllowed] = useState(true);
+  // const [allowed, setAllowed] = useState(true);
 
-  useEffect(() => {
-    setAllowed(checkedAllowed());
-  }, [user?.toString()]);
+  // useEffect(() => {
+  //   setAllowed(checkedAllowed());
+  // }, [user?.toString()]);
 
-  const checkedAllowed = () => {
-    let decoded = {};
-    try {
-      decoded = jwt_decode(user?.token);
-    } catch (err) {
-      console.log(err);
-    }
-    if (user?.token && decoded?.exp * 1000 > Date.now()) {
-      return true;
-    }
-    localStorage.clear();
-    setUser({ token: null });
-    return true;
-  };
+  // const checkedAllowed = () => {
+  //   let decoded = {};
+  //   try {
+  //     decoded = jwt_decode(user?.token);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   if (user?.token && decoded?.exp * 1000 > Date.now()) {
+  //     return true;
+  //   }
+  //   localStorage.clear();
+  //   setUser({ token: null });
+  //   return true;
+  // };
 
-  // return allowed && user?.token ? (
-  return true ? (
+  return user?.token ? (
+    // return true ? (
     <AppShell
       styles={{
         main: {
@@ -88,7 +88,7 @@ const GeneralLayout = () => {
         mih={"79vh"}
         style={{ borderRadius: "10px" }}
       >
-        {allowed && <Outlet />}
+        <Outlet />
       </Container>
     </AppShell>
   ) : (

@@ -1,14 +1,12 @@
 import { createContext, useState } from "react";
 export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
-  let userData = JSON.parse(localStorage.getItem("userData"));
+  let userData = JSON.parse(localStorage.getItem("user"));
   const [user, setUser] = useState({
-    // name: userData?.name,
-    // firstName: "",
-    // lastName: "",
-    id: userData?._id,
+    name: userData?.name,
+    id: userData?.userId,
     email: userData?.email,
-    token: userData?.token || "123",
+    token: userData?.token,
   });
   const value = { user, setUser };
 

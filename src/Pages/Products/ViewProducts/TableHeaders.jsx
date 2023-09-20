@@ -1,7 +1,9 @@
+import { Text } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
 import ViewService from "./ViewProduct";
+import { AlertTriangle } from "tabler-icons-react";
 
 export const Columns = [
   {
@@ -23,6 +25,11 @@ export const Columns = [
     sortable: true,
     // center: true,
     width: "250px",
+    cell: (row) => (
+      <Text style={{ display: "flex", alignItems: "center", gap:'5px' }}>
+        {row.title} {row.quantity < 6 && <AlertTriangle color="red" />}
+      </Text>
+    ),
   },
   {
     name: "Category",
