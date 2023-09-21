@@ -74,6 +74,22 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
           },
         });
         break;
+      case "Blog":
+        navigate(routeNames.general.addBlog, {
+          state: {
+            isUpdate: true,
+            data: rowData,
+          },
+        });
+        break;
+      case "FAQ":
+        navigate(routeNames.general.addFaq, {
+          state: {
+            isUpdate: true,
+            data: rowData,
+          },
+        });
+        break;
     }
   };
 
@@ -103,6 +119,9 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
         else if (type === "Expense")
           queryClient.invalidateQueries("fetchExpenses");
         else if (type === "User") queryClient.invalidateQueries("fetchUsers");
+        else if (type === "Blog") queryClient.invalidateQueries("fetchBlogs");
+        else if (type === "Faq") queryClient.invalidateQueries("fetchFaqs");
+        else if (type === "Coupen") queryClient.invalidateQueries("fetchCoupens");
       },
       onError: (res) => {
         showNotification({

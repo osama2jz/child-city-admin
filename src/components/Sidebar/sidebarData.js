@@ -1,7 +1,11 @@
 import {
   AddressBook,
+  BrandBlogger,
+  BrandFoursquare,
   BrandVite,
   Category2,
+  Discount,
+  DiscountOff,
   Graph,
   Settings,
   Users,
@@ -47,7 +51,7 @@ export const sidebarData = [
   },
   {
     label: "Sales",
-    icon: BrandVite,
+    icon: Discount,
     links: [
       { label: "Add Sale", link: routeNames.general.addSale },
       { label: "View Sales", link: routeNames.general.viewSales },
@@ -55,7 +59,7 @@ export const sidebarData = [
   },
   {
     label: "Coupens",
-    icon: BrandVite,
+    icon: DiscountOff,
     links: [
       { label: "Add Coupen", link: routeNames.general.addCoupen },
       { label: "View Coupens", link: routeNames.general.viewCoupens },
@@ -75,6 +79,22 @@ export const sidebarData = [
     label: "Orders",
     icon: AddressBook,
     link: routeNames.general.orders,
+  },
+  {
+    label: "Blogs",
+    icon: BrandBlogger,
+    links: [
+      { label: "Add Blog", link: routeNames.general.addBlog },
+      { label: "View Blogs", link: routeNames.general.viewBlog },
+    ],
+  },
+  {
+    label: "FAQs",
+    icon: BrandFoursquare,
+    links: [
+      { label: "Add FAQ", link: routeNames.general.addFaq },
+      { label: "View FAQs", link: routeNames.general.viewFaq },
+    ],
   },
   {
     label: "About Us",

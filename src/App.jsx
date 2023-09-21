@@ -22,6 +22,10 @@ import ViewSubCategories from "./Pages/SubCategories/ViewSubCategories";
 import { AddCoupen } from "./Pages/Coupens/AddCoupen";
 import ViewCoupens from "./Pages/Coupens/ViewCoupens";
 import AddRevenue from "./Pages/Accounts/AddRevenue";
+import { AddBlog } from "./Pages/Blogs/AddBlog";
+import ViewBlogs from "./Pages/Blogs/ViewBlogs";
+import { AddFaq } from "./Pages/FAQs/AddFaq";
+import ViewFaqs from "./Pages/FAQs/ViewFaqs";
 
 function App() {
   return (
@@ -62,6 +66,10 @@ function App() {
         <Route path={routeNames.general.users} element={<Users />} />
         <Route path={routeNames.general.addSale} element={<AddSale />} />
         <Route path={routeNames.general.addCoupen} element={<AddCoupen />} />
+        <Route path={routeNames.general.addBlog} element={<AddBlog />} />
+        <Route path={routeNames.general.viewBlog} element={<ViewBlogs />} />
+        <Route path={routeNames.general.addFaq} element={<AddFaq />} />
+        <Route path={routeNames.general.viewFaq} element={<ViewFaqs />} />
         <Route path={routeNames.general.viewSales} element={<ViewSales />} />
         <Route
           path={routeNames.general.viewCoupens}

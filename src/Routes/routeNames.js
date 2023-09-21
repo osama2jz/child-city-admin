@@ -20,5 +20,9 @@ export const routeNames = {
     users: "/users",
     addCoupen: "/add-coupen",
     viewCoupens: "/view-coupens",
+    addBlog: "/add-blog",
+    viewBlog: "/view-blogs",
+    addFaq: "/add-faq",
+    viewFaq: "/view-faqs",
   },
 };

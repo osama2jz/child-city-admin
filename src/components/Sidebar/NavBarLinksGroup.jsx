@@ -7,9 +7,12 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "tabler-icons-react";
+import { backendUrl } from "../../constants/constants";
 
 const useStyles = createStyles((theme) => ({
   mainLink: {
@@ -24,9 +27,9 @@ const useStyles = createStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.colors.blueSide,
     },
-    ':last-child':{
-      border:'none'
-    }
+    ":last-child": {
+      border: "none",
+    },
   },
 
   link: {
@@ -66,6 +69,7 @@ export function LinksGroup({
   const location = useLocation();
   const hasLinks = Array.isArray(links);
   const { classes, theme } = useStyles();
+  const [orderCount, setOrderCount] = useState(0);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === "ltr" ? ChevronRight : ChevronLeft;
 
@@ -73,6 +77,24 @@ export function LinksGroup({
     globalOpen !== label && setOpened(false);
   }, [globalOpen, label]);
 
+  const { status } = useQuery(
+    "fetchOrders",
+    () => {
+      return axios.get(backendUrl + "/order", {});
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+
+        setOrderCount(
+          data.reduce(
+            (acc, item) => (item.status === "Pending" ? acc + 1 : acc + 0),
+            0
+          )
+        );
+      },
+    }
+  );
   const items = (hasLinks ? links : []).map((link, index) => (
     <Flex
       component={Link}
@@ -102,7 +124,7 @@ export function LinksGroup({
       <Text
         color={
           location?.pathname === link.link && label === globalOpen
-            ? 'white'
+            ? "white"
             : "rgb(0,0,0,0.9)"
         }
       >
@@ -111,7 +133,7 @@ export function LinksGroup({
       <Text
         color={
           location?.pathname === link.link && label === globalOpen
-            ? 'white'
+            ? "white"
             : "rgb(0,0,0,0.9)"
         }
       >
@@ -157,7 +179,7 @@ export function LinksGroup({
           <Text
             color={
               location?.pathname === link && label === globalOpen
-                ? 'white'
+                ? "white"
                 : "rgb(0,0,0,0.9)"
             }
             sx={{ display: "flex", alignItems: "center" }}
@@ -172,6 +194,18 @@ export function LinksGroup({
               }
             />
             <Box ml="md">{ind ? ind + ". " + label : label}</Box>
+            {label === "Orders" && (
+              <Text
+                p={10}
+                ml="md"
+                bg={"#81d1e5"}
+                color="white"
+                lh={1}
+                style={{display:'flex', justifyContent:'center', alignItems:'center', borderRadius: "50%", minWidth:'20px', aspectRatio:'1/1' }}
+              >
+                {orderCount}
+              </Text>
+            )}
           </Text>
           {hasLinks && (
             <ChevronIcon

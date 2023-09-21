@@ -20,7 +20,7 @@ const customStyles = {
   },
 };
 
-const DataGrid = ({ columns, data, type, ...props }) => {
+const DataGrid = ({ columns, data, type, download = false, ...props }) => {
   const theme = useMantineTheme();
 
   const actionsMemo = React.useMemo(() => {
@@ -30,11 +30,21 @@ const DataGrid = ({ columns, data, type, ...props }) => {
     let csv = Papa.unparse(data);
     return (
       <Anchor
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          border: "2px dashed primary",
+          borderRadius: "10px",
+          fontSize: "14px",
+          padding: "5px",
+        }}
         href={`data:text/csv;charset=utf-8,${encodeURI(csv)}`}
         download={`${type}.csv`}
-        color="purple"
+        color="primary.0"
       >
-        <Download />
+        <Download size={16} />
+        Download
       </Anchor>
     );
   }, [data, type]);
@@ -57,7 +67,7 @@ const DataGrid = ({ columns, data, type, ...props }) => {
         subHeaderWrap
         // selectableRows
         progressComponent={<Loader my={10} color={theme.primaryColor} />}
-        // actions={actionsMemo}
+        actions={download && actionsMemo}
         customStyles={customStyles}
         {...props}
       />
