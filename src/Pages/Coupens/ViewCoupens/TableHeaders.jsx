@@ -60,7 +60,7 @@ export const Columns = [
     cell: (row) => (
       <ActionIcons
         rowData={row}
-        view={true}
+        // view={true}
         del={true}
         edit={true}
         viewData={<ViewCategory rowData={row} />}

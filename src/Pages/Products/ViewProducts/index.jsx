@@ -20,6 +20,7 @@ const ViewProducts = () => {
   const { user } = useContext(UserContext);
   const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const [blockedFilter, setBlockedFilter] = useState(null);
 
   const { status } = useQuery(
@@ -89,9 +90,9 @@ const ViewProducts = () => {
           </Grid.Col>
         </Grid>
         <DataGrid
-          columns={Columns}
+          columns={Columns(setLoading)}
           data={filteredItems}
-          progressPending={status === "loading"}
+          progressPending={status === "loading" || loading}
           type="service"
         />
       </Container>

@@ -55,11 +55,14 @@ export const Columns = [
     sortable: true,
     // center: true,
     width: "150px",
-    cell: (row) => (
-      <Anchor color="primary.0" href={row?.paymentReceipt}>
-        {"Receipt"}
-      </Anchor>
-    ),
+    cell: (row) =>
+      row?.paymentMode !== "cod" ? (
+        <Anchor color="primary.0" href={row?.paymentReceipt} target="_blank">
+          {"Receipt"}
+        </Anchor>
+      ) : (
+        <Text align="center">COD</Text>
+      ),
   },
   {
     name: "Status",

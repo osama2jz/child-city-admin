@@ -43,8 +43,7 @@ const ViewOrders = () => {
     }
   );
   const filteredItems = tableData.filter((item) => {
-    if (blockedFilter === null)
-      return item
+    if (blockedFilter === null) return item;
     else
       return (
         item?.customerName?.toLowerCase().includes(search.toLowerCase()) &&
@@ -76,11 +75,20 @@ const ViewOrders = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"2"} style={{ textAlign: "end" }}>
+          <Grid.Col sm="6" md="6" lg={"3"}>
             <Button
               label={"Clear Filters"}
+              fullWidth
               variant="outline"
               onClick={handleClearFilters}
+            />
+          </Grid.Col>
+          <Grid.Col sm="6" md="6" lg={"3"}>
+            <Button
+              label={"Add Order"}
+              leftIcon={"plus"}
+              fullWidth
+              onClick={() => navigate(routeNames.general.addOrder)}
             />
           </Grid.Col>
         </Grid>

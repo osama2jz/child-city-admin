@@ -46,6 +46,12 @@ const MultipleDropzone = ({
 
   // Function to handle file selection
   const handleFileSelect = (files) => {
+    files.forEach((obj) => {
+      if (obj.size > 24990000) {
+        toast.error(`File Size exceeded 25MB.`);
+        return;
+      }
+    });
     if ([...images, ...files].length > maxFiles) {
       toast.error(`You can only upload ${maxFiles} files`);
       const remainingFiles = maxFiles - images.length;

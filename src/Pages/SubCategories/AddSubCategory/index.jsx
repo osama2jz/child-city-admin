@@ -118,13 +118,6 @@ export const AddSubCategory = () => {
           handleAddSubCategory.mutate(values)
         )}
       >
-        <InputField
-          label={"Title"}
-          placeholder={"Enter Sub Category Title"}
-          form={form}
-          withAsterisk
-          validateName={"title"}
-        />
         <SelectMenu
           data={categories}
           label="Select Category"
@@ -133,6 +126,14 @@ export const AddSubCategory = () => {
           validateName="category"
           placeholder="Select Category"
         />
+        <InputField
+          label={"Title"}
+          placeholder={"Enter Sub Category Title"}
+          form={form}
+          withAsterisk
+          validateName={"title"}
+        />
+
         <TextArea
           label={"Short Description"}
           placeholder={"Enter Short Description"}

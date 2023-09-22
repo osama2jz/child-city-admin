@@ -59,7 +59,7 @@ const viewSubCategories = () => {
       <PageHeader label={"View Sub Categories"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col sm="6" lg="4">
+          <Grid.Col sm="6" lg="3">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -67,7 +67,7 @@ const viewSubCategories = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" lg="4">
+          <Grid.Col sm="6" lg="3">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -75,7 +75,7 @@ const viewSubCategories = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="6" lg={"2"}>
+          <Grid.Col sm="6" md="6" lg={"3"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
@@ -83,7 +83,7 @@ const viewSubCategories = () => {
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md={"6"} lg="2">
+          <Grid.Col sm="6" md={"6"} lg="3">
             <Button
               label={"Add Sub Category"}
               fullWidth

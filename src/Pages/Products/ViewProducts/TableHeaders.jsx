@@ -4,8 +4,9 @@ import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
 import ViewService from "./ViewProduct";
 import { AlertTriangle } from "tabler-icons-react";
+import Sale from "./Sale";
 
-export const Columns = [
+export const Columns =(setLoading)=> [
   {
     name: "Sr No.",
     selector: (row) => row.serialNo,
@@ -26,7 +27,7 @@ export const Columns = [
     // center: true,
     width: "250px",
     cell: (row) => (
-      <Text style={{ display: "flex", alignItems: "center", gap:'5px' }}>
+      <Text style={{ display: "flex", alignItems: "center", gap: "5px" }}>
         {row.title} {row.quantity < 6 && <AlertTriangle color="red" />}
       </Text>
     ),
@@ -65,6 +66,14 @@ export const Columns = [
     sortable: true,
     center: true,
     width: "180px",
+  },
+  {
+    name: "Sale",
+    selector: (row) => row.sale,
+    sortable: true,
+    // center: true,
+    width: "150px",
+    cell: (row) => <Sale row={row} setLoading={setLoading}/>,
   },
   {
     name: "Status",

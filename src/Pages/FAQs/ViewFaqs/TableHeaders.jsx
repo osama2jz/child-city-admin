@@ -49,7 +49,7 @@ export const Columns = [
         del={true}
         edit={true}
         viewData={<ViewCategory rowData={row} />}
-        type="Faq"
+        type="FAQ"
       />
     ),
   },

@@ -1,96 +1,45 @@
-import { Container, Group, Switch } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { Center, Container, Group, Loader, Title } from "@mantine/core";
 import { useContext, useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
 import Button from "../../../components/Button";
-import InputField from "../../../components/InputField";
 import PageHeader from "../../../components/PageHeader";
-import TextArea from "../../../components/TextArea";
-import MultiSelect from "../../../components/MultiSelect";
 import { UserContext } from "../../../contexts/UserContext";
-import axios from "axios";
+import SaleItem from "./SaleItem";
+import { useMutation, useQuery } from "react-query";
 import { backendUrl } from "../../../constants/constants";
+import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 
 export const AddSale = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
-  const [categories, setCategories] = useState([]);
-  const queryClient = useQueryClient();
-  const [subCategories, setSubCategories] = useState([]);
+  const [sales, setSale] = useState([]);
+  const [disableButton, setDisableButton] = useState(false);
 
-  const form = useForm({
-    validateInputOnChange: true,
-    initialValues: {
-      title: "",
-      sale: "",
-      description: "",
-      category: "",
-      subCategory: [],
-    },
-
-    validate: {
-      title: (value) =>
-        value?.length > 1 && value?.length < 30
-          ? null
-          : "Please enter Sale title",
-      sale: (value) => (value > 0 ? null : "Please enter sale percent"),
-      category: (value) =>
-        value?.length > 0 ? null : "Please select sale category",
-      description: (value) =>
-        value?.length > 0 ? null : "Please enter Sale description",
-    },
-  });
-
-  useEffect(() => {
-    if (state?.isUpdate) {
-      form.setValues(state.data);
-      form.setFieldValue(
-        "category",
-        state.data.category.map((obj) => obj._id.toString())
-      );
-    }
-  }, [state]);
-  const { _ } = useQuery(
-    "fetchSubCategories",
+  const { status } = useQuery(
+    "fetchSales",
     () => {
-      return axios.get(backendUrl + "/sub-category", {});
+      return axios.get(backendUrl + "/sale", {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      });
     },
     {
       onSuccess: (res) => {
-        let cat = res.data.data
-          .filter((obj) => !obj?.blocked)
-          .map((obj) => {
-            if (!obj?.blocked && obj.category._id == form?.values?.category)
-              return { label: obj.title, value: obj?._id };
-          })
-          .filter((item) => item !== undefined);
-        setSubCategories(cat);
+        const data = res.data.data;
+        data.map((item) => {
+          item.serialNo = data.indexOf(item) + 1;
+        });
+        setSale(data);
       },
-    },
-    { enabled: !!form.values.category }
+    }
   );
   const handleAddSale = useMutation(
-    (values) => {
-      if (state?.isUpdate)
-        return axios.put(
-          `${backendUrl + `/sale/${state?.data?._id}`}`,
-          values
-          // {
-          //   headers: {
-          //     authorization: `Bearer ${user.token}`,
-          //   },
-          // }
-        );
-      else
-        return axios.post(`${backendUrl + "/sale"}`, values, {
-          // headers: {
-          //   authorization: `Bearer ${user.token}`,
-          // },
-        });
+    () => {
+      return axios.post(`${backendUrl + "/sale"}`, sales, {});
     },
     {
       onSuccess: (response) => {
@@ -99,93 +48,50 @@ export const AddSale = () => {
           message: response?.data?.message,
           color: "green",
         });
-        navigate(routeNames.general.viewSales);
-        form.reset();
       },
     }
   );
-  const { status } = useQuery(
-    "fetchCategories",
-    () => {
-      return axios.get(backendUrl + "/category", {});
-    },
-    {
-      onSuccess: (res) => {
-        let cat = res.data.data
-          .filter((obj) => !obj?.blocked)
-          .map((obj) => {
-            if (!obj?.blocked) return { label: obj.title, value: obj?._id };
-          });
-
-        setCategories(cat);
-      },
-    }
-  );
-  useEffect(() => {
-    queryClient.invalidateQueries("fetchSubCategories");
-  }, [form.values.category]);
   return (
     <Container fluid>
-      <PageHeader label={state?.isUpdate ? "Edit Sale" : "Add Sale"} />
-      <form onSubmit={form.onSubmit((values) => handleAddSale.mutate(values))}>
-        <InputField
-          label={"Title"}
-          placeholder={"Enter Sale Title"}
-          form={form}
-          withAsterisk
-          validateName={"title"}
-        />
-        <MultiSelect
-          label="Select Category"
-          placeholder="Select Categories"
-          withAsterisk
-          data={categories}
-          form={form}
-          validateName="category"
-        />
-        <MultiSelect
-          label="Select Sub Category"
-          placeholder="Select Sub Categories"
-          nothingFound="No Sub Category in select category"
-          data={subCategories}
-          form={form}
-          validateName="subCategory"
-        />
-        <InputField
-          label={"Sale Percent"}
-          placeholder={"Enter Sale Amount in Percent"}
-          form={form}
-          withAsterisk
-          type="number"
-          validateName={"sale"}
-        />
-        <TextArea
-          label={"Short Description"}
-          placeholder={"Enter Short Description"}
-          rows="2"
-          form={form}
-          withAsterisk
-          validateName={"description"}
-        />
-        {/* <Switch
-          label="Default Activation Status"
-          defaultChecked={!form.values.blocked}
-          {...form.getInputProps("blocked")}
-          labelPosition="left"
-        /> */}
-        <Group position="right" mt={"md"}>
-          <Button
-            label={"Cancel"}
-            variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewSales)}
+      <PageHeader label={"Sales"} />
+      {status === "loading" ? (
+        <Center>
+          <Loader my="100px" />
+        </Center>
+      ) : sales.length > 0 ? (
+        sales.map((obj, ind) => (
+          <SaleItem
+            key={ind}
+            data={obj}
+            setData={setSale}
+            ind={ind}
+            sales={sales}
+            setDisableButton={setDisableButton}
           />
-          <Button
-            label={state?.isUpdate ? "Edit Sale" : "Add Sale"}
-            type={"submit"}
-            loading={handleAddSale.isLoading}
-          />
-        </Group>
-      </form>
+        ))
+      ) : (
+        <Title color="gray" my="100px" align="center">
+          No Sale Found
+        </Title>
+      )}
+      <Group position="right" mt={"md"}>
+        <Button
+          label={"Add More"}
+          variant={"outline"}
+          onClick={() =>
+            setSale([
+              ...sales,
+              { category: "", sale: 0, subCategory: [], blocked: true },
+            ])
+          }
+        />
+        <Button
+          label={"Save"}
+          loading={handleAddSale.isLoading}
+          disabled={disableButton}
+          onClick={() => handleAddSale.mutate(sales)}
+        />
+      </Group>
     </Container>
   );
 };

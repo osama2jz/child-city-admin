@@ -34,7 +34,7 @@ const ViewModal = ({ opened, setOpened, children, title }) => {
     >
       <Container className={classes.root} p="0px" size={"xl"}>
         {children}
-        <Group pt={"sm"} ml={"auto"}>
+        <Group pt={"sm"} position="center">
           <Button label="Close" onClick={() => setOpened(false)} />
         </Group>
       </Container>

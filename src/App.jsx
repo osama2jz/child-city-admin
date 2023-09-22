@@ -26,6 +26,8 @@ import { AddBlog } from "./Pages/Blogs/AddBlog";
 import ViewBlogs from "./Pages/Blogs/ViewBlogs";
 import { AddFaq } from "./Pages/FAQs/AddFaq";
 import ViewFaqs from "./Pages/FAQs/ViewFaqs";
+import { AddUser } from "./Pages/Users/AddUser";
+import { AddOrder } from "./Pages/Orders/AddOrder";
 
 function App() {
   return (
@@ -55,6 +57,7 @@ function App() {
           element={<ViewProducts />}
         />
         <Route path={routeNames.general.orders} element={<Orders />} />
+        <Route path={routeNames.general.addOrder} element={<AddOrder />} />
         <Route path={routeNames.general.settings} element={<Settings />} />
         <Route path={routeNames.general.addRevenue} element={<AddRevenue />} />
         <Route path={routeNames.general.revenue} element={<ViewRevenue />} />
@@ -64,6 +67,7 @@ function App() {
           element={<ViewExpenses />}
         />
         <Route path={routeNames.general.users} element={<Users />} />
+        <Route path={routeNames.general.addUser} element={<AddUser />} />
         <Route path={routeNames.general.addSale} element={<AddSale />} />
         <Route path={routeNames.general.addCoupen} element={<AddCoupen />} />
         <Route path={routeNames.general.addBlog} element={<AddBlog />} />

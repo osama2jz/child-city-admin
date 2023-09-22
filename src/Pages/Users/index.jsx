@@ -34,13 +34,10 @@ const Users = () => {
     {
       onSuccess: (res) => {
         const data = res.data.data;
-        let newData = data
-          .filter((obj) => !obj.isAdmin)
-          .map((item, ind) => {
-            item.serialNo = ind + 1;
-            return item;
-          });
-
+        let newData = data.map((item, ind) => {
+          item.serialNo = ind + 1;
+          return item;
+        });
         setTableData(newData);
       },
     }
@@ -63,7 +60,7 @@ const Users = () => {
       <PageHeader label={"View Users"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col md="6" lg="5">
+          <Grid.Col md="6" lg="4">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -71,7 +68,7 @@ const Users = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col md="6" lg="5">
+          <Grid.Col md="6" lg="4">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -85,6 +82,20 @@ const Users = () => {
               variant="outline"
               fullWidth
               onClick={handleClearFilters}
+            />
+          </Grid.Col>
+          <Grid.Col md="12" lg={"2"}>
+            <Button
+              label={"Add User"}
+              fullWidth
+              leftIcon={"plus"}
+              onClick={() =>
+                navigate(routeNames.general.addUser, {
+                  state: {
+                    count: filteredItems.filter(((obj) => obj.isAdmin)).length,
+                  },
+                })
+              }
             />
           </Grid.Col>
         </Grid>

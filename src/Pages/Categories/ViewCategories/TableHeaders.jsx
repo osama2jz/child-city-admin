@@ -1,9 +1,12 @@
+import { ActionIcon, Flex } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
 import StatusToggle from "../../../components/StatusToggle";
 import TableImageView from "../../../components/TableImageView";
 import ViewCategory from "./ViewCategory";
+import { ArrowNarrowDown, ArrowNarrowUp } from "tabler-icons-react";
+import ChangeOrder from "./ChangeOrder";
 
-export const Columns = [
+export const Columns = (data) => [
   {
     name: "Sr No.",
     selector: (row) => row.serialNo,
@@ -52,6 +55,12 @@ export const Columns = [
         queryName="fetchCategories"
       />
     ),
+  },
+  {
+    name: "Order",
+    width: "100px",
+    center: true,
+    cell: (row, ind) => <ChangeOrder ind={ind} rows={data} />,
   },
   {
     name: "Actions",

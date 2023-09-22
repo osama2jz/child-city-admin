@@ -23,10 +23,9 @@ export const AddCategory = () => {
     validateInputOnChange: true,
     initialValues: {
       title: "",
-      subTitle: "",
+      // subTitle: "",
       description: "",
       image: null,
-      order: null,
     },
 
     validate: {
@@ -34,12 +33,10 @@ export const AddCategory = () => {
         value?.length > 1 && value?.length < 30
           ? null
           : "Please enter category title",
-      subTitle: (value) =>
-        value?.length > 1 && value?.length < 30
-          ? null
-          : "Please enter category sub title",
-      order: (value) =>
-        value > 0 ? null : "Please enter category display order",
+      // subTitle: (value) =>
+      //   value?.length > 1 && value?.length < 30
+      //     ? null
+      //     : "Please enter category sub title",
       description: (value) =>
         value?.length > 0 ? null : "Please enter category description",
       image: (value) => (value ? null : "Please upload a cover Image"),
@@ -102,21 +99,13 @@ export const AddCategory = () => {
           withAsterisk
           validateName={"title"}
         />
-        <InputField
+        {/* <InputField
           label={"Sub Title"}
           placeholder={"Enter Category Sub Title"}
           form={form}
           withAsterisk
           validateName={"subTitle"}
-        />
-        <InputField
-          label={"Display Order"}
-          placeholder={"Enter Category display order"}
-          form={form}
-          type="number"
-          withAsterisk
-          validateName={"order"}
-        />
+        /> */}
         <TextArea
           label={"Short Description"}
           placeholder={"Enter Short Description"}

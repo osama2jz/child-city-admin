@@ -35,6 +35,7 @@ export const AddProduct = () => {
       colors: [],
       sizes: [],
       price: "",
+      actualPrice: "",
       sale: "",
       quantity: 0,
       sku: "",
@@ -44,15 +45,21 @@ export const AddProduct = () => {
 
     validate: {
       title: (value) =>
-        value?.length > 1 && value?.length < 30
+        value?.length > 1 && value?.length < 200
           ? null
-          : "Please enter product title",
+          : "Please enter product title (upto 200 characters)",
       category: (value) =>
         value?.length > 0 ? null : "Please select product category",
-      price: (value) => (value > 0 ? null : "Please enter product price"),
+      price: (value) =>
+        value > 0 && value < 10000
+          ? null
+          : "Please enter product price (0 to 10000)",
+      actualPrice: (value) =>
+        value > 0 && value < 10000 ? null : "Please enter actual price",
       quantity: (value) =>
-        value >= 0 ? null : "Please select product quantity",
-      sku: (value) => (value?.length > 0 ? null : "Please select product sku"),
+        value >= 0 && value < 10000
+          ? null
+          : "Please select product quantity (0 to 10000)",
       description: (value) =>
         value?.length > 0 ? null : "Please enter product description",
       images: (value) =>
@@ -71,6 +78,7 @@ export const AddProduct = () => {
   useEffect(() => {
     queryClient.invalidateQueries("fetchSubCategories");
   }, [form.values.category]);
+  
   const handleAddProduct = useMutation(
     async (values) => {
       const urls = await uploadMultipleImages(values.images, "Products");
@@ -172,13 +180,13 @@ export const AddProduct = () => {
           <Grid.Col sm={6}>
             <MultiSelect
               data={colorss}
-              label="Select Colors"
+              label="Select or Type Colors"
               placeholder="Select Colors"
               form={form}
               creatable={true}
               searchable={true}
               validateName="colors"
-              getCreateLabel={(query) => `+ Create ${query}`}
+              getCreateLabel={(query) => ` ${query}`}
               onCreate={(query) => {
                 const item = query;
                 setColors((current) => [...current, item]);
@@ -197,6 +205,16 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <InputField
+              label={"Actual Price"}
+              placeholder={"Enter Actua Price"}
+              type="number"
+              withAsterisk
+              form={form}
+              validateName="actualPrice"
+            />
+          </Grid.Col>
+          <Grid.Col sm={6}>
+            <InputField
               label={"Price"}
               placeholder={"Enter Product Price"}
               withAsterisk
@@ -205,15 +223,7 @@ export const AddProduct = () => {
               validateName="price"
             />
           </Grid.Col>
-          <Grid.Col sm={6}>
-            <InputField
-              label={"Sale"}
-              placeholder={"Enter Sale in Percent"}
-              type="number"
-              form={form}
-              validateName="sale"
-            />
-          </Grid.Col>
+
           <Grid.Col sm={6}>
             <InputField
               label={"Quantity"}

@@ -34,7 +34,8 @@ export const AddCoupen = () => {
           : "Please enter Coupen title",
       code: (value) =>
         value?.length == 8 ? null : "Please enter valid coupen code",
-      off: (value) => (value > 0 ? null : "Please enter off amount in percent"),
+      off: (value) =>
+        value > 0 && value <= 100 ? null : "Please enter off amount in percent",
       description: (value) =>
         value?.length > 0 ? null : "Please enter coupen description",
     },
@@ -66,21 +67,20 @@ export const AddCoupen = () => {
     },
     {
       onSuccess: (response) => {
-        if (response?.status == 200) {
-          showNotification({
-            title: "Success",
-            message: response?.data?.message,
-            color: "green",
-          });
-          navigate(routeNames.general.viewCoupens);
-          form.reset();
-        } else {
-          showNotification({
-            title: "Error",
-            message: response?.data?.message,
-            color: "red",
-          });
-        }
+        showNotification({
+          title: "Success",
+          message: response?.data?.message,
+          color: "green",
+        });
+        navigate(routeNames.general.viewCoupens);
+        form.reset();
+      },
+      onError: (err) => {
+        showNotification({
+          title: "Error",
+          message: err?.response?.data?.error,
+          color: "red",
+        });
       },
     }
   );
@@ -124,7 +124,7 @@ export const AddCoupen = () => {
           <Button
             label={"Cancel"}
             variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewCategory)}
+            onClick={() => navigate(routeNames.general.viewCoupens)}
           />
           <Button
             label={state?.isUpdate ? "Edit Coupen" : "Add Coupen"}

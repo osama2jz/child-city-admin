@@ -1,4 +1,4 @@
-import { Anchor } from "@mantine/core";
+import { Anchor, Text } from "@mantine/core";
 import ActionIcons from "../../components/ActionIcons";
 import StatusToggle from "../../components/StatusToggle";
 import TableImageView from "../../components/TableImageView";
@@ -22,6 +22,14 @@ export const Columns = [
     sortable: true,
     // center: true,
     width: "200px",
+  },
+  {
+    name: "User Type",
+    selector: (row) => row.isAdmin,
+    sortable: true,
+    // center: true,
+    width: "200px",
+    cell: (row) => <Text>{row.isAdmin ? "Admin" : "Customer"}</Text>,
   },
   {
     name: "Phone Number",

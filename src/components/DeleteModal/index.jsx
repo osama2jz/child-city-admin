@@ -37,7 +37,7 @@ const DeleteModal = ({
         <img src={cross} alt="icon" width={"40px"} />
         <Text fw={"bold"}>{label}</Text>
         <Text align="center">{message}</Text>
-        <Group pt={"sm"} ml={"auto"}>
+        <Group pt={"sm"} position="center">
           <Button
             label="Cancel"
             disabled={loading}

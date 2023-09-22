@@ -67,7 +67,7 @@ const ViewCategories = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" lg="4">
+          <Grid.Col sm="6" lg="3">
             <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
@@ -75,7 +75,7 @@ const ViewCategories = () => {
               onChange={setBlockedFilter}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"2"}>
+          <Grid.Col sm="6" md="6" lg={"2"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
@@ -83,7 +83,7 @@ const ViewCategories = () => {
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md={"6"} lg="2">
+          <Grid.Col sm="6" md={"6"} lg="3">
             <Button
               label={"Add Category"}
               fullWidth
@@ -93,7 +93,7 @@ const ViewCategories = () => {
           </Grid.Col>
         </Grid>
         <DataGrid
-          columns={Columns}
+          columns={Columns(filteredItems)}
           data={filteredItems}
           progressPending={status === "loading"}
           type="service"

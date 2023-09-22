@@ -20,7 +20,7 @@ const customStyles = {
   },
 };
 
-const DataGrid = ({ columns, data, type, download = false, ...props }) => {
+const DataGrid = ({ columns, data, type, download = true, ...props }) => {
   const theme = useMantineTheme();
 
   const actionsMemo = React.useMemo(() => {

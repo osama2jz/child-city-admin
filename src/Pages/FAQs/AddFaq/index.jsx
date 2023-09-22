@@ -112,10 +112,10 @@ export const AddFaq = () => {
           <Button
             label={"Cancel"}
             variant={"outline"}
-            onClick={() => navigate(routeNames.general.viewBlog)}
+            onClick={() => navigate(routeNames.general.viewFaq)}
           />
           <Button
-            label={state?.isUpdate ? "Edit Faq" : "Add Faq"}
+            label={state?.isUpdate ? "Edit FAQ" : "Add FAQ"}
             type={"submit"}
             loading={handleAddFaq.isLoading}
           />

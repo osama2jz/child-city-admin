@@ -1,11 +1,9 @@
 import {
   Anchor,
   Flex,
-  Group,
-  Image,
   Text,
   Title,
-  useMantineTheme,
+  useMantineTheme
 } from "@mantine/core";
 
 const ViewOrder = ({ rowData }) => {
@@ -14,11 +12,11 @@ const ViewOrder = ({ rowData }) => {
     <Flex direction={"column"} w={"100%"}>
       <Flex justify={"space-between"} mx={50}>
         <Title order={5}>Customer Name: </Title>
-        <Text>{rowData?.customerName}</Text>
+        <Text>{rowData?.userId?.name || "Guest User"}</Text>
       </Flex>
       <Flex justify={"space-between"} mx={50}>
         <Title order={5}>Quantity: </Title>
-        <Text>{rowData?.quantity}</Text>
+        <Text>{rowData?.product.reduce((a, curr) => a + curr.quantity, 0)}</Text>
       </Flex>
       <Flex justify={"space-between"} mx={50}>
         <Title order={5}>Amount: </Title>

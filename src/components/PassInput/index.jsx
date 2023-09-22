@@ -10,6 +10,7 @@ const PassInput = ({
   form,
   size = "md",
   validateName,
+  withAsterisk,
   backgroundColor = "transparent",
 }) => {
   const useStyles = createStyles((theme) => ({
@@ -25,7 +26,7 @@ const PassInput = ({
       w={width}
       pb={pb}
       size={size}
-      withAsterisk={required ? true : false}
+      withAsterisk={withAsterisk}
       label={label}
       {...form?.getInputProps(validateName)}
       icon={
