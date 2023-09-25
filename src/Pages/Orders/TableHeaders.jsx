@@ -79,6 +79,7 @@ export const Columns = [
     cell: (row) => (
       <ActionIcons
         rowData={row}
+        viewSize="auto"
         view={true}
         // del={true}
         // edit={true}

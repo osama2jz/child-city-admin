@@ -11,7 +11,16 @@ import { UserContext } from "../../contexts/UserContext";
 import DeleteModal from "../DeleteModal";
 import ViewModal from "../ViewModal";
 
-const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
+const ActionIcons = ({
+  rowData,
+  type,
+  edit,
+  view,
+  del,
+  viewData,
+  blocked,
+  viewSize = "lg",
+}) => {
   const queryClient = useQueryClient();
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -121,7 +130,8 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
         else if (type === "User") queryClient.invalidateQueries("fetchUsers");
         else if (type === "Blog") queryClient.invalidateQueries("fetchBlogs");
         else if (type === "Faq") queryClient.invalidateQueries("fetchFaqs");
-        else if (type === "Coupen") queryClient.invalidateQueries("fetchCoupens");
+        else if (type === "Coupen")
+          queryClient.invalidateQueries("fetchCoupens");
       },
       onError: (res) => {
         showNotification({
@@ -165,6 +175,7 @@ const ActionIcons = ({ rowData, type, edit, view, del, viewData, blocked }) => {
         opened={openView}
         setOpened={setOpenView}
         title={`View ${type}`}
+        size={viewSize}
       >
         {viewData}
       </ViewModal>

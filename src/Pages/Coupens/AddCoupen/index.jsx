@@ -1,4 +1,4 @@
-import { Container, Group } from "@mantine/core";
+import { Checkbox, Container, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
@@ -24,6 +24,7 @@ export const AddCoupen = () => {
       name: "",
       code: "",
       off: 0,
+      oneTime: false,
       description: "",
     },
 
@@ -40,7 +41,7 @@ export const AddCoupen = () => {
         value?.length > 0 ? null : "Please enter coupen description",
     },
   });
-
+  console.log(form.values);
   useEffect(() => {
     if (state?.isUpdate) {
       form.setValues(state.data);
@@ -119,6 +120,11 @@ export const AddCoupen = () => {
           form={form}
           withAsterisk
           validateName={"description"}
+        />
+        <Checkbox
+          label="One Time"
+          checked={form.values.oneTime}
+          {...form.getInputProps("oneTime")}
         />
         <Group position="right" mt={"md"}>
           <Button

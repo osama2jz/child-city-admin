@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const ViewModal = ({ opened, setOpened, children, title }) => {
+const ViewModal = ({ opened, setOpened, children, title, size="lg" }) => {
   const { classes } = useStyles();
   return (
     <ModalMantine
@@ -25,7 +25,7 @@ const ViewModal = ({ opened, setOpened, children, title }) => {
       title={title}
       centered
       radius={"lg"}
-      size={"lg"}
+      size={size}
       styles={{
         overlay: {
           backdropFilter: "blur(3px)",

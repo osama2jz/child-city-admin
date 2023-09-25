@@ -1,45 +1,140 @@
 import {
   Anchor,
+  Box,
   Flex,
+  Grid,
+  Group,
+  Image,
+  Stack,
   Text,
   Title,
-  useMantineTheme
+  useMantineTheme,
 } from "@mantine/core";
+import { useState } from "react";
+import logo from "../../assets/logo.png";
 
 const ViewOrder = ({ rowData }) => {
   const theme = useMantineTheme();
+  const [receipt, setReceipt] = useState(rowData);
+
   return (
     <Flex direction={"column"} w={"100%"}>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Customer Name: </Title>
-        <Text>{rowData?.userId?.name || "Guest User"}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Quantity: </Title>
-        <Text>{rowData?.product.reduce((a, curr) => a + curr.quantity, 0)}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Amount: </Title>
-        <Text>{rowData?.totalPrice}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Shipping Province: </Title>
-        <Text>{rowData?.address.province}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Shipping City: </Title>
-        <Text>{rowData?.address.city}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Shipping Address: </Title>
-        <Text align="justify" maw={"50%"}>{rowData?.address.address}</Text>
-      </Flex>
-      <Flex justify={"space-between"} mx={50}>
-        <Title order={5}>Payment Receipt: </Title>
-        <Anchor color="primary.0" href={rowData?.paymentReceipt}>
-          Receipt
-        </Anchor>
-      </Flex>
+      <Box
+        // miw={1000}
+        style={{
+          border: "2px dashed rgb(0,0,0,0.1)",
+          marginBlock: "50px",
+          borderRadius: "20px",
+          padding: "50px",
+          margin: "50px",
+          //   transform: isMobile ? "scale(0.7)" : "",
+        }}
+      >
+        <Group position="right">
+          <Title style={{ margin: "auto" }}> Order Invoice</Title>
+          <Image src={logo} width={100} />
+        </Group>
+        <Stack>
+          <Text>
+            <b>Name: </b>
+            {receipt.name}
+          </Text>
+          <Text>
+            <b>Email: </b>
+            {receipt.email}
+          </Text>
+          <Text>
+            <b>Phone: </b>
+            {receipt.phone}
+          </Text>
+          <Text>
+            <b>Order #: </b>
+            {receipt?.orderNo}
+          </Text>
+          <Text>
+            <b>Date: </b>
+            {new Date().toLocaleDateString()}
+          </Text>
+          <Text>
+            <b>Delivery Address: </b>
+            {receipt?.address?.address +
+              ", " +
+              receipt?.address?.city +
+              ", " +
+              receipt?.address?.province}
+          </Text>
+          <Title align="center" order={3}>
+            {" "}
+            Order Details
+          </Title>
+          <Grid bg="rgb(0,0,0,0.1)">
+            <Grid.Col span={2}>
+              <Title order={5}>Qty.</Title>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Title order={5}>Product</Title>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <Title order={5}>Unit Price</Title>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <Title order={5}>Amount</Title>
+            </Grid.Col>
+          </Grid>
+          {receipt.product.map((obj, ind) => (
+            <Grid key={ind}>
+              <Grid.Col span={2}>
+                <Text order={5}>{obj?.quantity}</Text>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <Box>
+                  <Text fw="bold">{obj?.product?.title}</Text>
+                  {obj?.product?.selectedColor && (
+                    <Text fz={"sm"}>Color: {obj?.product?.selectedColor}</Text>
+                  )}
+                  {obj?.product?.selectedSize && (
+                    <Text fz={"sm"}>Size: {obj?.product?.selectedSize}</Text>
+                  )}
+                </Box>
+              </Grid.Col>
+              <Grid.Col span={2}>
+                <Text>
+                  Rs.{" "}
+                  {obj?.product?.sale > 0
+                    ? (obj?.product?.price * (100 - obj?.product?.sale)) / 100
+                    : obj?.product?.price}
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={2}>
+                <Text>
+                  Rs.{" "}
+                  {obj?.product?.sale > 0
+                    ? Math.round(
+                        ((obj?.product?.price * (100 - obj?.product?.sale)) /
+                          100) *
+                          obj?.quantity
+                      )
+                    : obj?.product?.price * obj?.quantity}
+                </Text>
+              </Grid.Col>
+            </Grid>
+          ))}
+          <Group position="right">
+            <Text>
+              SubTotal:{" "}
+              {receipt?.totalPrice < 3000
+                ? receipt?.totalPrice - 149
+                : receipt?.totalPrice}
+            </Text>
+          </Group>
+          <Group position="right">
+            <Text>Delivery: {receipt.totalPrice > 3000 ? 0 : 149}</Text>
+          </Group>
+          <Group position="right">
+            <Text fw={"bold"}>Total: {receipt?.totalPrice}</Text>
+          </Group>
+        </Stack>
+      </Box>
     </Flex>
   );
 };
