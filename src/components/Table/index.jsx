@@ -34,7 +34,7 @@ const DataGrid = ({ columns, data, type, download = true, ...props }) => {
           display: "flex",
           alignItems: "center",
           gap: "10px",
-          border: "2px dashed primary",
+          border: "2px dashed rgb(255, 140, 147)",
           borderRadius: "10px",
           fontSize: "14px",
           padding: "5px",

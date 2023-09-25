@@ -87,12 +87,12 @@ export const sidebarData = [
     ],
   },
   {
-    label: "Complaints & Feedback",
+    label: "Complaints",
     icon: BrandWechat,
-    links: [
-      { label: "Complaints", link: routeNames.general.viewExpesnes },
-      { label: "Feedback", link: routeNames.general.revenue },
-    ],
+    link: routeNames.general.viewComplaints
+      // { label: "Complaints", link: routeNames.general.viewExpesnes },
+      // { label: "Feedback", link: routeNames.general.revenue },
+    // ],
   },
   {
     label: "About Us",

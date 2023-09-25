@@ -36,7 +36,7 @@ const Sale = ({ row, setLoading }) => {
   );
 
   return (
-    <Flex justify={"flex-start"} align={"center"}>
+    <Flex justify={"flex-start"} align={"center"} key={row?._id}>
       <NumberInput
         max={100}
         min={0}

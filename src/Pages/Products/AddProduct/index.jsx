@@ -1,4 +1,4 @@
-import { Container, Grid, Group } from "@mantine/core";
+import { Container, Flex, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
@@ -36,7 +36,7 @@ export const AddProduct = () => {
       sizes: [],
       price: "",
       actualPrice: "",
-      sale: "",
+      sale: 0,
       quantity: 0,
       sku: "",
       description: "",
@@ -63,7 +63,7 @@ export const AddProduct = () => {
       description: (value) =>
         value?.length > 0 ? null : "Please enter product description",
       images: (value) =>
-        value.length > 0 ? null : "Please upload product image",
+        value?.length > 0 ? null : "Please upload product image",
     },
   });
 
@@ -76,9 +76,10 @@ export const AddProduct = () => {
   }, [state]);
 
   useEffect(() => {
+    form.setFieldValue("subCategory", null);
     queryClient.invalidateQueries("fetchSubCategories");
   }, [form.values.category]);
-  
+
   const handleAddProduct = useMutation(
     async (values) => {
       const urls = await uploadMultipleImages(values.images, "Products");
@@ -140,6 +141,26 @@ export const AddProduct = () => {
     },
     { enabled: !!form.values.category }
   );
+
+  const handleGenerateSku = () => {
+    const c = categories.filter((obj) => obj.value == form.values.category)[0]
+      ?.label[0];
+    const sc =
+      subCategories.filter((obj) => obj.value == form.values.subCategory)[0]
+        ?.label[0] || "X";
+    let allprods = state?.allProducts.filter(
+      (obj) => obj?.category?._id === form.values.category
+    );
+    if (form.values?.subCategory) {
+      allprods = allprods.filter(
+        (obj) => obj.subCategory?._id === form.values.subCategory
+      );
+    }
+    const num = allprods.length + 1;
+    const sku = "CC-" + c + "-" + sc + "-" + num;
+    form.setFieldValue("sku", sku);
+  };
+
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Product" : "Add Product"} />
@@ -235,13 +256,21 @@ export const AddProduct = () => {
             />
           </Grid.Col>
           <Grid.Col sm={6}>
-            <InputField
-              label={"SKU"}
-              placeholder={"Enter Product SKU"}
-              withAsterisk
-              form={form}
-              validateName="sku"
-            />
+            <Flex align={"center"} gap="md">
+              <InputField
+                label={"SKU"}
+                placeholder={"Enter Product SKU"}
+                withAsterisk
+                form={form}
+                validateName="sku"
+                style={{ flex: 1 }}
+              />
+              <Button
+                label={"Generate SKU"}
+                disabled={!form.values.category}
+                onClick={() => handleGenerateSku()}
+              />
+            </Flex>
           </Grid.Col>
           <Grid.Col sm={12}>
             <TextArea

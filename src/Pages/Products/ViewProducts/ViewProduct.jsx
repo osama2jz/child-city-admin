@@ -24,14 +24,29 @@ const ViewProduct = ({ rowData }) => {
         height={isMobile ? 350 : 300}
       >
         {rowData?.images.map((obj, ind) => (
-          <Carousel.Slide key={ind} style={{ display: "flex", justifyContent: "center" }}>
-            <Image
-              src={obj}
-              width={300}
-              height={300}
-              withPlaceholder
-              fit="cover"
-            />
+          <Carousel.Slide
+            key={ind}
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            {obj.includes(".mp4") ? (
+              <iframe
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  // minHeight: "500px",
+                }}
+                src={obj}
+                controls
+              />
+            ) : (
+              <Image
+                src={obj}
+                width={300}
+                height={300}
+                withPlaceholder
+                fit="cover"
+              />
+            )}
           </Carousel.Slide>
         ))}
       </Carousel>
@@ -48,7 +63,9 @@ const ViewProduct = ({ rowData }) => {
       </Group>
       <Group position="apart">
         <Title order={5}>Colors</Title>
-        <Text align="justify" maw={'60%'}>{rowData?.colors.join(", ")}</Text>
+        <Text align="justify" maw={"60%"}>
+          {rowData?.colors.join(", ")}
+        </Text>
       </Group>
       <Group position="apart">
         <Title order={5}>Sizes</Title>
@@ -56,7 +73,7 @@ const ViewProduct = ({ rowData }) => {
       </Group>
       <Group position="apart">
         <Title order={5}>Sub Category</Title>
-        <Text align="justify">{rowData?.subCategory.title}</Text>
+        <Text align="justify">{rowData?.subCategory?.title}</Text>
       </Group>
       <Group position="apart">
         <Title order={5}>Actual Price</Title>

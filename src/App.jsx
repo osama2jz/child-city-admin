@@ -28,6 +28,7 @@ import { AddFaq } from "./Pages/FAQs/AddFaq";
 import ViewFaqs from "./Pages/FAQs/ViewFaqs";
 import { AddUser } from "./Pages/Users/AddUser";
 import { AddOrder } from "./Pages/Orders/AddOrder";
+import ViewComplaints from "./Pages/Complaints/ViewComplaints";
 
 function App() {
   return (
@@ -75,6 +76,10 @@ function App() {
         <Route path={routeNames.general.addFaq} element={<AddFaq />} />
         <Route path={routeNames.general.viewFaq} element={<ViewFaqs />} />
         <Route path={routeNames.general.viewSales} element={<ViewSales />} />
+        <Route
+          path={routeNames.general.viewComplaints}
+          element={<ViewComplaints />}
+        />
         <Route
           path={routeNames.general.viewCoupens}
           element={<ViewCoupens />}

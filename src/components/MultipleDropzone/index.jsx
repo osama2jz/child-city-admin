@@ -7,7 +7,12 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
+import {
+  Dropzone,
+  IMAGE_MIME_TYPE,
+  MIME_TYPES,
+  PDF_MIME_TYPE,
+} from "@mantine/dropzone";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -46,9 +51,10 @@ const MultipleDropzone = ({
 
   // Function to handle file selection
   const handleFileSelect = (files) => {
-    files.forEach((obj) => {
+    files.forEach((obj, ind) => {
       if (obj.size > 24990000) {
         toast.error(`File Size exceeded 25MB.`);
+        files = files.slice(ind-1, ind);
         return;
       }
     });
@@ -105,13 +111,13 @@ const MultipleDropzone = ({
 
   const handleMimeType = () => {
     if (type === "image") {
-      return IMAGE_MIME_TYPE;
+      return [MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.svg, MIME_TYPES.mp4];
     } else {
       return [...IMAGE_MIME_TYPE, ...PDF_MIME_TYPE];
     }
   };
-
   const ImagePreview = ({ index, image }) => {
+    console.log(image);
     return (
       <div
         style={{
@@ -125,12 +131,13 @@ const MultipleDropzone = ({
           onClick={() => handleFileDelete(index)}
         />
         {image.type === "application/pdf" ||
-        (typeof image === "string" && image?.includes(".pdf")) ? (
+        (typeof image === "string" && image?.includes(".pdf")) ||
+        image.type === "video/mp4" ? (
           <iframe
             style={{
               width: "100%",
               height: "100%",
-              minHeight: "500px",
+              // minHeight: "500px",
             }}
             src={image?.preview || image}
             controls
@@ -230,7 +237,7 @@ const MultipleDropzone = ({
                       weight={400}
                       size={isMobile ? 12 : 14}
                     >
-                      The file should be in jpg, png format
+                      The file should be in jpeg, png, mp4 format
                     </Text>
                     {form?.errors?.[fieldName] && (
                       <Text color="red" mt={10} size={isMobile ? "xs" : "sm"}>

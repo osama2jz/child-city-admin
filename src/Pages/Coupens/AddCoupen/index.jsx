@@ -33,7 +33,7 @@ export const AddCoupen = () => {
           ? null
           : "Please enter Coupen title",
       code: (value) =>
-        value?.length == 8 ? null : "Please enter valid coupen code",
+        value?.length == 11 ? null : "Please enter valid coupen code",
       off: (value) =>
         value > 0 && value <= 100 ? null : "Please enter off amount in percent",
       description: (value) =>

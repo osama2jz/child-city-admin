@@ -4,7 +4,9 @@ import {
   Group,
   Loader,
   SimpleGrid,
+  Stack,
   Tabs,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -175,7 +177,7 @@ export const AboutUs = () => {
                   />
                 </SimpleGrid>
                 <TextArea
-                  rows="1"
+                  rows="2"
                   placeholder={"Enter Top Screen Floating Alert"}
                   label={"Top Alert"}
                   form={form}
@@ -186,14 +188,15 @@ export const AboutUs = () => {
           </Tabs.Panel>
 
           <Tabs.Panel value="imgs" pt="xs">
-            <Center>
-              <DropZone
-                label={"Sale Alert Image"}
-                form={form}
-                name={"saleAlertImage"}
-                folderName={"sale"}
-              />
-            </Center>
+              <Stack align="center">
+                <Title order={5}>Sale Alert Image</Title>
+                <DropZone
+                  label={"Sale Alert Image"}
+                  form={form}
+                  name={"saleAlertImage"}
+                  folderName={"sale"}
+                />
+              </Stack>
             <MultipleDropzone
               maxFiles={3}
               text="Home Slider Images"

@@ -87,17 +87,20 @@ export default function DropZone({ form, name, folderName, label }) {
             width: "100%",
             height: "100%",
             position: "relative",
+            display:'flex',
+            alignItems:'center'
           }}
         >
           {progress === null || progress === 100 ? (
             <Image
               src={form.values[name]}
               alt="preview"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
+              // style={{
+              //   width: "100%",
+              //   height: "100%",
+              //   objectPosition:'50px 50px'
+              //   // objectFit: "fill",
+              // }}
               withPlaceholder
               placeholder={<Loader h={"200px"} m={"auto"} />}
             />
@@ -119,7 +122,7 @@ export default function DropZone({ form, name, folderName, label }) {
               form.setFieldValue(name, null);
             }}
           >
-            <X />
+            <X color="black"/>
           </ActionIcon>
         </Box>
       )}

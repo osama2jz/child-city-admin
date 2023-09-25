@@ -3,6 +3,9 @@ import { useState } from "react";
 import Chart from "react-apexcharts";
 import PageHeader from "../../components/PageHeader";
 import { useStyles } from "./styles";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { backendUrl } from "../../constants/constants";
 
 export const Dashboard = () => {
   const theme = useMantineTheme();
@@ -177,6 +180,56 @@ export const Dashboard = () => {
       ],
     },
   });
+  const { status } = useQuery(
+    "fetchSalesStats",
+    () => {
+      return axios.get(backendUrl + "/stats/view-sales", {});
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        console.log(data);
+        setSaleData({
+          ...saleData,
+          series: data?.data,
+          options: {
+            ...saleData.options,
+            xaxis: { type: "datetime", categories: data.dates },
+          },
+        });
+        // data.map((item) => {
+        //   item.serialNo = data.indexOf(item) + 1;
+        // });
+        // setTableData(data);
+      },
+    }
+  );
+
+  const { _ } = useQuery(
+    "fetchRevenueStats",
+    () => {
+      return axios.get(backendUrl + "/stats/view-revenue", {});
+    },
+    {
+      onSuccess: (res) => {
+        const data = res.data.data;
+        console.log(data);
+        setRevenueData({
+          ...revenueData,
+          series: data?.data,
+          options: {
+            ...revenueData.options,
+            xaxis: { type: "datetime", categories: data.dates },
+          },
+        });
+        // data.map((item) => {
+        //   item.serialNo = data.indexOf(item) + 1;
+        // });
+        // setTableData(data);
+      },
+    }
+  );
+
   return (
     <Box className={classes.main}>
       <PageHeader label={"Dashboard"} />

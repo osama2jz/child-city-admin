@@ -1,32 +1,29 @@
 import { Container, Grid } from "@mantine/core";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
-import SelectMenu from "../../../components/SelectMenu";
-import { useStyles } from "../styles";
-import { Columns, filterbyStatus } from "./TableHeaders";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
 import PageHeader from "../../../components/PageHeader";
 import DataGrid from "../../../components/Table";
-import InputField from "../../../components/InputField";
-import Button from "../../../components/Button";
-import { UserContext } from "../../../contexts/UserContext";
 import { backendUrl } from "../../../constants/constants";
-import { routeNames } from "../../../Routes/routeNames";
-import { useNavigate } from "react-router";
+import { useStyles } from "../styles";
+import { Columns } from "./TableHeaders";
 
-const ViewProducts = () => {
+const ViewComplaints = () => {
   const { classes } = useStyles();
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext);
   const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
   const [blockedFilter, setBlockedFilter] = useState(null);
 
   const { status } = useQuery(
-    "fetchProducts",
+    "fetchComplaints",
     () => {
-      return axios.get(backendUrl + "/product", {});
+      return axios.get(backendUrl + "/complaint", {
+        // headers: {
+        //   authorization: `Bearer ${user.token}`,
+        // },
+      });
     },
     {
       onSuccess: (res) => {
@@ -40,10 +37,10 @@ const ViewProducts = () => {
   );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
-      return item?.title?.toLowerCase().includes(search.toLowerCase());
+      return item?.customerName?.toLowerCase().includes(search.toLowerCase());
     else
       return (
-        item?.title?.toLowerCase().includes(search.toLowerCase()) &&
+        item?.customerName?.toLowerCase().includes(search.toLowerCase()) &&
         item?.blocked === blockedFilter
       );
   });
@@ -53,10 +50,10 @@ const ViewProducts = () => {
   };
   return (
     <Container size="xl" p="sm">
-      <PageHeader label={"View Products"} />
+      <PageHeader label={"View Complaints"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
         <Grid p="xs">
-          <Grid.Col md="6" lg="4">
+          <Grid.Col sm="6" lg="4">
             <InputField
               placeholder={"Search Title"}
               leftIcon="search"
@@ -64,15 +61,15 @@ const ViewProducts = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col md="6" lg="4">
-            <SelectMenu
+          {/* <Grid.Col sm="6" lg="3"> */}
+          {/* <SelectMenu
               placeholder={"Filter by Status"}
               data={filterbyStatus}
               value={blockedFilter}
               onChange={setBlockedFilter}
             />
-          </Grid.Col>
-          <Grid.Col sm="6" lg={"2"}>
+          </Grid.Col> */}
+          <Grid.Col sm="6" md="6" lg={"2"}>
             <Button
               label={"Clear Filters"}
               variant="outline"
@@ -80,23 +77,11 @@ const ViewProducts = () => {
               onClick={handleClearFilters}
             />
           </Grid.Col>
-          <Grid.Col sm="6" lg="2">
-            <Button
-              label={"Add Product"}
-              fullWidth
-              leftIcon="plus"
-              onClick={() =>
-                navigate(routeNames.general.addProduct, {
-                  state: { allProducts: tableData },
-                })
-              }
-            />
-          </Grid.Col>
         </Grid>
         <DataGrid
-          columns={Columns(setLoading)}
+          columns={Columns(filteredItems)}
           data={filteredItems}
-          progressPending={status === "loading" || loading}
+          progressPending={status === "loading"}
           type="service"
         />
       </Container>
@@ -104,4 +89,4 @@ const ViewProducts = () => {
   );
 };
 
-export default ViewProducts;
+export default ViewComplaints;
