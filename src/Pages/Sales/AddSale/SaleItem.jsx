@@ -39,7 +39,7 @@ const SaleItem = ({ data, setData, ind, sales, setDisableButton }) => {
   console.log(form.values.blocked);
   useEffect(() => {
     form.setValues(data);
-    form.setFieldValue("category", data.category._id);
+    form.setFieldValue("category", data.category?._id);
   }, []);
 
   useEffect(() => {
