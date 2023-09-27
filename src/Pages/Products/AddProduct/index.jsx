@@ -25,7 +25,12 @@ export const AddProduct = () => {
   const [colorss, setColors] = useState(colors);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-
+  useEffect(() => {
+    if (state?.isUpdate) {
+      const newColors = state?.data?.colors.filter((v) => !colors.includes(v));
+      setColors([...colors, ...newColors]);
+    }
+  }, []);
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
