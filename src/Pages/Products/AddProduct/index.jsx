@@ -161,7 +161,8 @@ export const AddProduct = () => {
         (obj) => obj.subCategory?._id === form.values.subCategory
       );
     }
-    const num = allprods.length + 1;
+    let prevSku = allprods[allprods.length - 1]?.sku.split("-");
+    const num = parseInt(prevSku[3]) + 1;
     const sku = "CC-" + c + "-" + sc + "-" + num;
     form.setFieldValue("sku", sku);
   };
