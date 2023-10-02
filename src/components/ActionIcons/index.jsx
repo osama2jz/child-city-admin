@@ -130,6 +130,7 @@ const ActionIcons = ({
         else if (type === "User") queryClient.invalidateQueries("fetchUsers");
         else if (type === "Blog") queryClient.invalidateQueries("fetchBlogs");
         else if (type === "Faq") queryClient.invalidateQueries("fetchFaqs");
+        else if (type === "Order") queryClient.invalidateQueries("fetchOrders");
         else if (type === "Coupen")
           queryClient.invalidateQueries("fetchCoupens");
       },
