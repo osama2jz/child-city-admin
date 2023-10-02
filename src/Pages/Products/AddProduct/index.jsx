@@ -24,6 +24,7 @@ export const AddProduct = () => {
   let { state } = useLocation();
   const [colorss, setColors] = useState(colors);
   const [categories, setCategories] = useState([]);
+  const [dontNull, setDontNull] = useState(true);
   const [subCategories, setSubCategories] = useState([]);
   useEffect(() => {
     if (state?.isUpdate) {
@@ -77,11 +78,17 @@ export const AddProduct = () => {
       form.setValues(state.data);
       form.setFieldValue("category", state?.data?.category?._id);
       form.setFieldValue("subCategory", state?.data?.subCategory?._id);
+      form.resetDirty("category");
     }
   }, [state]);
-
   useEffect(() => {
-    form.setFieldValue("subCategory", null);
+    if (
+      form.values.category &&
+      form.isDirty("category") &&
+      form.values.category !== state?.data?.category?._id
+    ) {
+      form.setFieldValue("subCategory", null);
+    }
     queryClient.invalidateQueries("fetchSubCategories");
   }, [form.values.category]);
 

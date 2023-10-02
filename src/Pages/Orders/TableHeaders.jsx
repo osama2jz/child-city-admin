@@ -15,7 +15,7 @@ export const Columns = [
     selector: (row) => row?.orderNo,
     sortable: true,
     // center: true,
-    width: "250px",
+    width: "200px",
   },
   {
     name: "Customer Name",
@@ -30,7 +30,7 @@ export const Columns = [
     selector: (row) => row.address.city,
     sortable: true,
     // center: true,
-    width: "200px",
+    width: "150px",
   },
   {
     name: "Total Items",
@@ -81,7 +81,7 @@ export const Columns = [
         rowData={row}
         viewSize="auto"
         view={true}
-        // del={true}
+        del={true}
         // edit={true}
         viewData={<ViewService rowData={row} />}
         type="Order"

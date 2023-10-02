@@ -54,7 +54,7 @@ const MultipleDropzone = ({
     files.forEach((obj, ind) => {
       if (obj.size > 24990000) {
         toast.error(`File Size exceeded 25MB.`);
-        files = files.slice(ind-1, ind);
+        files = files.slice(ind - 1, ind);
         return;
       }
     });
@@ -117,7 +117,6 @@ const MultipleDropzone = ({
     }
   };
   const ImagePreview = ({ index, image }) => {
-    console.log(image);
     return (
       <div
         style={{
