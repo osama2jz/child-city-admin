@@ -30,6 +30,7 @@ const firebaseConfig = {
   measurementId: "G-PMK5HTF33V"
 };
 
+
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);

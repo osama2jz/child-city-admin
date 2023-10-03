@@ -115,6 +115,13 @@ export const AddProduct = () => {
         navigate(routeNames.general.viewProducts);
         form.reset();
       },
+      onError: (res) => {
+        showNotification({
+          title: "Error",
+          message: err?.response?.data?.error,
+          color: "red",
+        });
+      },
     }
   );
 
@@ -168,7 +175,8 @@ export const AddProduct = () => {
         (obj) => obj.subCategory?._id === form.values.subCategory
       );
     }
-    let prevSku = allprods[allprods.length - 1]?.sku.split("-");
+    console.log(allprods);
+    let prevSku = allprods[0]?.sku.split("-");
     const num = parseInt(prevSku[3]) + 1;
     const sku = "CC-" + c + "-" + sc + "-" + num;
     form.setFieldValue("sku", sku);
