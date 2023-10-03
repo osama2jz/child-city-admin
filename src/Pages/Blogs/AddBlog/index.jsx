@@ -29,7 +29,7 @@ export const AddBlog = () => {
 
     validate: {
       title: (value) =>
-        value?.length > 1 && value?.length < 60
+        value?.length > 1 && value?.length < 200
           ? null
           : "Please enter blog title",
       details: (value) =>

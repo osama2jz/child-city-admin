@@ -10,14 +10,24 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAqi8EioZAZgTT5MAhxqBUqYTpcEPUtO3M",
+//   authDomain: "decimal-solutions-8c191.firebaseapp.com",
+//   projectId: "decimal-solutions-8c191",
+//   storageBucket: "decimal-solutions-8c191.appspot.com",
+//   messagingSenderId: "674398346861",
+//   appId: "1:674398346861:web:0f1d877901c2d7e30da964",
+//   measurementId: "G-C7V3M8PVCB",
+// };
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAqi8EioZAZgTT5MAhxqBUqYTpcEPUtO3M",
-  authDomain: "decimal-solutions-8c191.firebaseapp.com",
-  projectId: "decimal-solutions-8c191",
-  storageBucket: "decimal-solutions-8c191.appspot.com",
-  messagingSenderId: "674398346861",
-  appId: "1:674398346861:web:0f1d877901c2d7e30da964",
-  measurementId: "G-C7V3M8PVCB",
+  apiKey: "AIzaSyDaT-o92wqrvZsCi4vigDwY2y5YdpiNb7s",
+  authDomain: "child-city.firebaseapp.com",
+  projectId: "child-city",
+  storageBucket: "child-city.appspot.com",
+  messagingSenderId: "643411160558",
+  appId: "1:643411160558:web:49a0134538e98f4d0f72ff",
+  measurementId: "G-PMK5HTF33V"
 };
 
 // Initialize Firebase
