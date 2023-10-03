@@ -40,7 +40,7 @@ const ViewProducts = () => {
   );
   const filteredItems = tableData.filter((item) => {
     if (blockedFilter === null)
-      return item?.title?.toLowerCase().includes(search.toLowerCase());
+      return item?.title?.toLowerCase().includes(search.toLowerCase()) || item?.sku?.toLowerCase().includes(search.toLowerCase());
     else
       return (
         item?.title?.toLowerCase().includes(search.toLowerCase()) &&

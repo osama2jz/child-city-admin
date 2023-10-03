@@ -174,10 +174,12 @@ export const AddProduct = () => {
       allprods = allprods.filter(
         (obj) => obj.subCategory?._id === form.values.subCategory
       );
+    } else {
+      allprods = allprods.filter((obj) => obj.subCategory === null);
     }
-    console.log(allprods);
     let prevSku = allprods[0]?.sku.split("-");
-    const num = parseInt(prevSku[3]) + 1;
+    console.log(prevSku);
+    const num = (prevSku?.length > 0 ? parseInt(prevSku[3]) : 0) + 1;
     const sku = "CC-" + c + "-" + sc + "-" + num;
     form.setFieldValue("sku", sku);
   };
