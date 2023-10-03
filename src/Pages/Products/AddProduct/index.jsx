@@ -230,7 +230,7 @@ export const AddProduct = () => {
           </Grid.Col>
           <Grid.Col sm={6}>
             <MultiSelect
-              data={["3-6M", "6-9M", "1-2Y", "2-3Y", "3-4Y"]}
+              data={["3-6M", "6-12M", "1-2Y", "2-3Y", "3-4Y"]}
               label="Select Sizes"
               placeholder="Select Sizes"
               form={form}
@@ -240,7 +240,7 @@ export const AddProduct = () => {
           <Grid.Col sm={6}>
             <InputField
               label={"Actual Price"}
-              placeholder={"Enter Actua Price"}
+              placeholder={"Enter Actual Price"}
               type="number"
               withAsterisk
               form={form}

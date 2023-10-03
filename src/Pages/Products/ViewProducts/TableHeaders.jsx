@@ -5,8 +5,9 @@ import TableImageView from "../../../components/TableImageView";
 import ViewService from "./ViewProduct";
 import { AlertTriangle } from "tabler-icons-react";
 import Sale from "./Sale";
+import DisplayHome from "./DisplayHome";
 
-export const Columns =(setLoading)=> [
+export const Columns = (setLoading, allData) => [
   {
     name: "Sr No.",
     selector: (row) => row.serialNo,
@@ -73,7 +74,15 @@ export const Columns =(setLoading)=> [
     sortable: true,
     // center: true,
     width: "150px",
-    cell: (row) => <Sale row={row} setLoading={setLoading}/>,
+    cell: (row) => <Sale row={row} setLoading={setLoading} />,
+  },
+  {
+    name: "Home Display",
+    selector: (row) => row.showOnHome,
+    sortable: true,
+    center: true,
+    width: "150px",
+    cell: (row) => <DisplayHome data={row} allData={allData}/>,
   },
   {
     name: "Status",

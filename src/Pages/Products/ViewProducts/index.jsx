@@ -94,7 +94,7 @@ const ViewProducts = () => {
           </Grid.Col>
         </Grid>
         <DataGrid
-          columns={Columns(setLoading)}
+          columns={Columns(setLoading, filteredItems)}
           data={filteredItems}
           progressPending={status === "loading" || loading}
           type="service"
