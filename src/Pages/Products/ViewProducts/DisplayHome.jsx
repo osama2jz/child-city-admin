@@ -1,4 +1,4 @@
-import { Switch } from "@mantine/core";
+import { Loader, Switch } from "@mantine/core";
 import axios from "axios";
 import React from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -28,12 +28,15 @@ const DisplayHome = ({ data, allData }) => {
       },
     }
   );
-  return (
+  return handleShowOnHome.isLoading ? (
+    <Loader />
+  ) : (
     <Switch
       key={data._id}
       defaultChecked={data.showOnHome}
       disabled={total > 11 && !data.showOnHome}
       color="primary.0"
+      loaad
       onChange={(e) => handleShowOnHome.mutate(e.target.checked)}
     />
   );
