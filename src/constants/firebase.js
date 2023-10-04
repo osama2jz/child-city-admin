@@ -27,9 +27,8 @@ const firebaseConfig = {
   storageBucket: "child-city.appspot.com",
   messagingSenderId: "643411160558",
   appId: "1:643411160558:web:49a0134538e98f4d0f72ff",
-  measurementId: "G-PMK5HTF33V"
+  measurementId: "G-PMK5HTF33V",
 };
-
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
@@ -56,18 +55,15 @@ export const uploadSingleFile = ({
     },
     (err) => console.log(err),
     () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(
-        (url) => urlSetter(url)
-        // url fetched... store it
-        // handleChangeCategory({ name: "image", value: url })
-      );
+      getDownloadURL(uploadTask.snapshot.ref).then((url) => urlSetter(url));
     }
   );
 };
 export const uploadMultipleImages = async (files, folderName) => {
   const urls = [];
+  console.log(files);
   return Promise.all(
-    files.map(async (file) => {
+    files.map(async (file, ind) => {
       if (file == null || file === "" || file?.length == 0) {
         urls.push("");
       } else if (typeof file === "string") {
@@ -79,7 +75,7 @@ export const uploadMultipleImages = async (files, folderName) => {
         );
         const snapshot = await uploadBytes(storageRef, file);
         const url = await getDownloadURL(snapshot.ref);
-        urls.push(url);
+        urls.splice(ind, 0, url);
       }
     })
   ).then(() => {

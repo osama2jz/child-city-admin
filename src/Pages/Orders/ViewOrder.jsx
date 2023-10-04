@@ -10,16 +10,24 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import logo from "../../assets/logo.png";
+import { useReactToPrint } from "react-to-print";
+import Button from "../../components/Button";
 
 const ViewOrder = ({ rowData }) => {
   const theme = useMantineTheme();
   const [receipt, setReceipt] = useState(rowData);
+  const invoice = useRef();
+  const printInvoice = useReactToPrint({
+    content: () => invoice.current,
+  });
 
   return (
-    <Flex direction={"column"} w={"100%"}>
+    <Flex direction={"column"} w={"100%"} align={"flex-end"}>
+      <Button label={"Print"} onClick={() => printInvoice()} />
       <Box
+        ref={invoice}
         // miw={1000}
         style={{
           border: "2px dashed rgb(0,0,0,0.1)",

@@ -178,7 +178,6 @@ export const AddProduct = () => {
       allprods = allprods.filter((obj) => obj.subCategory === null);
     }
     let prevSku = allprods[0]?.sku.split("-");
-    console.log(prevSku);
     const num = (prevSku?.length > 0 ? parseInt(prevSku[3]) : 0) + 1;
     const sku = "CC-" + c + "-" + sc + "-" + num;
     form.setFieldValue("sku", sku);

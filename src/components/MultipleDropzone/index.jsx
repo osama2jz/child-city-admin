@@ -131,6 +131,7 @@ const MultipleDropzone = ({
         />
         {image.type === "application/pdf" ||
         (typeof image === "string" && image?.includes(".pdf")) ||
+        (typeof image === "string" && image?.includes(".mp4")) ||
         image.type === "video/mp4" ? (
           <iframe
             style={{
