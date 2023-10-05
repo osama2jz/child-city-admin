@@ -13,17 +13,36 @@ import { UserContext } from "../../../contexts/UserContext";
 import DropZone from "../../../components/Dropzone";
 import { useLocation, useNavigate } from "react-router";
 import { routeNames } from "../../../Routes/routeNames";
+import { useEditor } from "@tiptap/react";
+import TextEditor from "../../../components/TextEditor";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 
 export const AddBlog = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let { state } = useLocation();
-
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+    content: state?.data?.details || "",
+  });
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
       title: "",
-      details: "",
       image: null,
     },
 
@@ -32,8 +51,6 @@ export const AddBlog = () => {
         value?.length > 1 && value?.length < 200
           ? null
           : "Please enter blog title",
-      details: (value) =>
-        value?.length > 0 ? null : "Please enter blog details",
       image: (value) => (value ? null : "Please upload a cover Image"),
     },
   });
@@ -41,11 +58,14 @@ export const AddBlog = () => {
   useEffect(() => {
     if (state?.isUpdate) {
       form.setValues(state.data);
+      console.log(state.data.details);
+      editor?.commands.insertContent(state.data.details);
     }
   }, [state]);
 
   const handleAddBlog = useMutation(
     (values) => {
+      values.details = editor?.getHTML();
       if (state?.isUpdate)
         return axios.put(
           `${backendUrl + `/blog/${state?.data?._id}`}`,
@@ -82,7 +102,6 @@ export const AddBlog = () => {
       },
     }
   );
-
   return (
     <Container fluid>
       <PageHeader label={state?.isUpdate ? "Edit Blog" : "Add Blog"} />
@@ -94,16 +113,8 @@ export const AddBlog = () => {
           withAsterisk
           validateName={"title"}
         />
-
-        <TextArea
-          label={"Blog details"}
-          placeholder={"Enter Blog details"}
-          rows="5"
-          form={form}
-          withAsterisk
-          validateName={"details"}
-        />
-        <Group position="center">
+        <TextEditor editor={editor} />
+        <Group position="center" mt="lg">
           <DropZone
             form={form}
             folderName={"blog"}

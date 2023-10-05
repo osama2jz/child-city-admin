@@ -1,3 +1,4 @@
+import ReactHtmlParser from "react-html-parser";
 import { Flex, Image, Text, Title, useMantineTheme } from "@mantine/core";
 
 const ViewProduct = ({ rowData }) => {
@@ -25,7 +26,7 @@ const ViewProduct = ({ rowData }) => {
         {rowData?.title}
       </Text>
       <Title order={3}>Description</Title>
-      <Text>{rowData?.details}</Text>
+      <Text>{ReactHtmlParser(rowData?.details)}</Text>
     </Flex>
   );
 };
