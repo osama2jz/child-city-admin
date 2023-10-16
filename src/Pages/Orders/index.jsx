@@ -36,18 +36,22 @@ const ViewOrders = () => {
         const data = res.data.data;
         data.map((item) => {
           item.serialNo = data.indexOf(item) + 1;
-          item.customerName ?? "Guest User";
         });
         setTableData(data);
       },
     }
   );
   const filteredItems = tableData.filter((item) => {
-    if (blockedFilter === null) return item;
+    console.log(item);
+    if (blockedFilter === null)
+      return (
+        item?.name.toLowerCase().includes(search?.toLowerCase()) ||
+        item?.orderNo.toLowerCase().includes(search?.toLowerCase())
+      );
     else
       return (
-        item?.customerName?.toLowerCase().includes(search.toLowerCase()) &&
-        item?.delivered === blockedFilter
+        item?.name?.toLowerCase().includes(search.toLowerCase()) &&
+        item?.status === blockedFilter
       );
   });
   const handleClearFilters = () => {
@@ -95,7 +99,7 @@ const ViewOrders = () => {
         <DataGrid
           columns={Columns}
           data={filteredItems}
-          // progressPending={status === "loading"}
+          progressPending={status === "loading"}
           type="service"
         />
       </Container>

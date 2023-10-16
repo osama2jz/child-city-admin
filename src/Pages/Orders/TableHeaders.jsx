@@ -19,11 +19,11 @@ export const Columns = [
   },
   {
     name: "Customer Name",
-    selector: (row) => row?.userId,
+    selector: (row) => row?.name,
     sortable: true,
     // center: true,
     width: "250px",
-    cell: (row) => <Text>{row?.userId?.name || "Guest User"}</Text>,
+    cell: (row) => <Text>{row?.name || "Guest User"}</Text>,
   },
   {
     name: "City",

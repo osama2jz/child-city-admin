@@ -95,15 +95,20 @@ const ViewOrder = ({ rowData }) => {
                 <Text order={5}>{obj?.quantity}</Text>
               </Grid.Col>
               <Grid.Col span={6}>
-                <Box>
-                  <Text fw="bold">{obj?.product?.title}</Text>
-                  {obj?.product?.selectedColor && (
-                    <Text fz={"sm"}>Color: {obj?.product?.selectedColor}</Text>
-                  )}
-                  {obj?.product?.selectedSize && (
-                    <Text fz={"sm"}>Size: {obj?.product?.selectedSize}</Text>
-                  )}
-                </Box>
+                <Group>
+                  <Image src={obj?.product?.images[0]} width={50}/>
+                  <Box>
+                    <Text fw="bold">{obj?.product?.title}</Text>
+                    {obj?.product?.selectedColor && (
+                      <Text fz={"sm"}>
+                        Color: {obj?.product?.selectedColor}
+                      </Text>
+                    )}
+                    {obj?.product?.selectedSize && (
+                      <Text fz={"sm"}>Size: {obj?.product?.selectedSize}</Text>
+                    )}
+                  </Box>
+                </Group>
               </Grid.Col>
               <Grid.Col span={2}>
                 <Text>
