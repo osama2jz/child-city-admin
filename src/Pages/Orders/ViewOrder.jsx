@@ -135,13 +135,15 @@ const ViewOrder = ({ rowData }) => {
           <Group position="right">
             <Text>
               SubTotal:{" "}
-              {receipt?.totalPrice < 3000
-                ? receipt?.totalPrice - 149
-                : receipt?.totalPrice}
+              {receipt?.subtotal}
             </Text>
           </Group>
           <Group position="right">
-            <Text>Delivery: {receipt.totalPrice > 3000 ? 0 : 149}</Text>
+            <Text>Delivery: {receipt?.totalPrice > 3000 ? 0 : 149}</Text>
+          </Group>
+          <Group position="right">
+            {receipt?.coupen > 0 && <Text>Coupen Discount: </Text>}
+            {receipt?.coupen > 0 && <Text>{receipt?.coupen}% </Text>}
           </Group>
           <Group position="right">
             <Text fw={"bold"}>Total: {receipt?.totalPrice}</Text>
