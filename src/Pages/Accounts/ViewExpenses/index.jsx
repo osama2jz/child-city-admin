@@ -58,7 +58,7 @@ const ViewExpenses = () => {
     <Container size="xl" p="sm">
       <PageHeader label={"View Expenses"} />
       <Container size="xl" pb={"md"} bg={"white"} className={classes.table}>
-        <Grid p="xs">
+        <Grid p="xs" grow>
           <Grid.Col sm="12" lg="6">
             <InputField
               placeholder={"Search Title"}
@@ -67,7 +67,7 @@ const ViewExpenses = () => {
               onChange={(v) => setSearch(v.target.value)}
             />
           </Grid.Col>
-          <Grid.Col sm="6" md="3" lg={"3"}>
+          <Grid.Col sm="6" md="6" lg={"3"}>
             <Button
               label={"Clear Filters"}
               variant="outline"

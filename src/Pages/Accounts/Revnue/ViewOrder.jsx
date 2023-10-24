@@ -22,7 +22,7 @@ const ViewOrder = ({ rowData }) => {
       />
       <Flex justify={"space-between"} mx={50}>
         <Title order={5}>Customer Name: </Title>
-        <Text>{rowData?.name}</Text>
+        <Text>{rowData?.customerName}</Text>
       </Flex>
       <Flex justify={"space-between"} mx={50}>
         <Title order={5}>Product Name: </Title>

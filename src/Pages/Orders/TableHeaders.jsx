@@ -1,6 +1,6 @@
 import { Anchor, Text } from "@mantine/core";
 import ActionIcons from "../../components/ActionIcons";
-import ViewService from "./ViewOrder";
+import ViewOrder from "./ViewOrder";
 import OrderStatusToggle from "../../components/OrderStatusToggle";
 
 export const Columns = [
@@ -83,7 +83,7 @@ export const Columns = [
         view={true}
         del={true}
         // edit={true}
-        viewData={<ViewService rowData={row} />}
+        viewData={<ViewOrder rowData={row} />}
         type="Order"
       />
     ),

@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Box,
   Flex,
   Grid,
@@ -8,20 +7,36 @@ import {
   Stack,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { useRef, useState } from "react";
-import logo from "../../assets/logo.png";
 import { useReactToPrint } from "react-to-print";
+import logo from "../../assets/logo.png";
 import Button from "../../components/Button";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { backendUrl } from "../../constants/constants";
 
 const ViewOrder = ({ rowData }) => {
-  const theme = useMantineTheme();
   const [receipt, setReceipt] = useState(rowData);
   const invoice = useRef();
   const printInvoice = useReactToPrint({
     content: () => invoice.current,
   });
+
+  const { status } = useQuery(
+    "fetchSingleOrder",
+    () => {
+      return axios.get(backendUrl + `/order/single/${rowData?.orderId}`, {});
+    },
+    {
+      onSuccess: (res) => {
+        let data = res.data.data;
+        // console.log(data)
+        setReceipt(data);
+      },
+    },
+    { enabled: !!rowData?.orderId }
+  );
 
   return (
     <Flex direction={"column"} w={"100%"} align={"flex-end"}>
@@ -96,7 +111,7 @@ const ViewOrder = ({ rowData }) => {
               </Grid.Col>
               <Grid.Col span={6}>
                 <Group>
-                  <Image src={obj?.product?.images[0]} width={50}/>
+                  <Image src={obj?.product?.images[0]} width={50} />
                   <Box>
                     <Text fw="bold">{obj?.product?.title}</Text>
                     {obj?.product?.selectedColor && (
@@ -133,10 +148,7 @@ const ViewOrder = ({ rowData }) => {
             </Grid>
           ))}
           <Group position="right">
-            <Text>
-              SubTotal:{" "}
-              {receipt?.subtotal}
-            </Text>
+            <Text>SubTotal: {receipt?.subtotal}</Text>
           </Group>
           <Group position="right">
             <Text>Delivery: {receipt?.totalPrice > 3000 ? 0 : 149}</Text>

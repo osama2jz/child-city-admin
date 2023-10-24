@@ -1,8 +1,6 @@
-import { Anchor, Badge, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import ActionIcons from "../../../components/ActionIcons";
-import StatusToggle from "../../../components/StatusToggle";
-import TableImageView from "../../../components/TableImageView";
-import ViewService from "./ViewOrder";
+import ViewOrder from "../../Orders/ViewOrder";
 
 export const Columns = [
   {
@@ -20,23 +18,27 @@ export const Columns = [
     cell: (row) => <Text>{row?.customerName || "Guest User"}</Text>,
   },
   {
+    name: "Revenue Title",
+    selector: (row) => row?.title,
+    sortable: true,
+    // center: true,
+    grow: 1,
+    cell: (row) => <Text>{row?.title || "N/A"}</Text>,
+  },
+  {
+    name: "Date",
+    selector: (row) => row?.createdAt,
+    sortable: true,
+    // center: true,
+    grow: 1,
+    cell: (row) => <Text>{new Date(row?.createdAt).toLocaleDateString() || "NA"}</Text>,
+  },
+  {
     name: "Amount",
     selector: (row) => row.totalPrice,
     sortable: true,
     center: true,
     width: "150px",
-  },
-  {
-    name: "Payment",
-    selector: (row) => row.paymentReceipt,
-    sortable: true,
-    // center: true,
-    width: "120px",
-    cell: (row) => (
-      <Anchor color="primary.0" href={row?.paymentReceipt}>
-        {"Receipt"}
-      </Anchor>
-    ),
   },
   {
     name: "Actions",
@@ -48,7 +50,9 @@ export const Columns = [
         view={true}
         // del={true}
         // edit={true}
-        viewData={<ViewService rowData={row} />}
+        disabledView={!row?.orderId}
+        viewSize="auto"
+        viewData={<ViewOrder rowData={row} />}
         type="Revenue"
       />
     ),
